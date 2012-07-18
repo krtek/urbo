@@ -112,12 +112,17 @@
                         alert('Failed because: ' + message);
                     }
                     
-                    function getPhoto() {
+                    function getPhoto(photoSourceType) {
                         navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
                                                     destinationType: Camera.DestinationType.FILE_URI,
-                                                    sourceType: Camera.PictureSourceType.PHOTOLIBRARY 
+                                                    sourceType: photoSourceType 
                                                     //sourceType: Camera.PictureSourceType.CAMERA 
                                                     });
+                    }
+                    
+                    function getSomePhoto() {
+                        var w = dijit.byId('dataView');
+                        w.performTransition('#getSomePhotoView',1,"fade",null);                        
                     }
                     
                     </script>
@@ -135,7 +140,7 @@
             <div data-dojo-type="dojox.mobile.RoundRect">
                 <div style="display: inline">
                     <div style="display: inline">
-                        <button data-dojo-type="dojox.mobile.Button" data-dojo-props='label:"Vybrat foto"' baseClass="btnPhoto" onclick="getPhoto();" />
+                        <button data-dojo-type="dojox.mobile.Button" data-dojo-props='label:"Vybrat foto"' baseClass="btnPhoto" onClick="getSomePhoto();" />
                     </div>
                     <div style="display: inline">
                         <input data-dojo-type="dojox.mobile.TextBox" placeHolder="Titulek" />
@@ -153,6 +158,14 @@ Postoloprty
                 <br/><br/>
                 <textarea data-dojo-type="dojox.mobile.ExpandingTextArea" cols="30" maxLenght="1000" placeHolder="Popis"></textarea>
             </div>
+        </div>
+        
+        <div id="getSomePhotoView" data-dojo-type="dojox.mobile.View">
+            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="dataView">Přidání fotky</h1>
+            <ul data-dojo-type="dojox.mobile.RoundRectList">
+                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="getPhoto(Camera.PictureSourceType.CAMERA)" data-dojo-props='variableHeight:true'>Kamera, test, tes,tes t,stest, et,st est</li>
+                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="getPhoto(Camera.PictureSourceType.PHOTOLIBRARY)">Knihovna obrázků</li>
+            </ul>
         </div>
         
         <div id="recapitulationView" data-dojo-type="dojox.mobile.View">
