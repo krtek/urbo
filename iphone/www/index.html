@@ -83,9 +83,11 @@
                              "dojox/mobile/compat", 
                              "dojox/mobile",
                              "dojox/mobile/Button",
+                             "dojox/mobile/CheckBox",
                              "dojox/mobile/IconItem",                             
                              "dojox/mobile/TextBox",
-                             "dojox/mobile/TextArea"], 
+                             "dojox/mobile/TextArea",
+                             "dojox/mobile/ExpandingTextArea"], 
                             function(parser, deviceTheme) {
                             
                             // Parse the page for widgets!
@@ -121,57 +123,57 @@
                     </script>
                 </head>
     <body onload="onBodyLoad()">
-        <div id="photoView" data-dojo-type="dojox.mobile.View" data-dojo-props="selected: true">
-            <h1 data-dojo-type="dojox.mobile.Heading">Dobrý občan - Foto</h1>
-
-            <!--
-            <button onclick="getPhoto(Camera.PictureSourceType.CAMERA);">Přiložte foto</button>
-
-            <img style="display:none;width:140px;height:140px;" id="eventPhoto" src="" />
-
-            
--->            
-            <ul data-dojo-type="dojox.mobile.RoundRectList">
-                <li data-dojo-type="dojox.mobile.ListItem">
-                    Titulek: <input data-dojo-type="dojox.mobile.TextBox" placeHolder="Vyplní dobrý občan" />
-                </li>
-            </ul>
-            
-            <h2 data-dojo-type="dojox.mobile.RoundRectCategory">Obrázek</h2>
-            <button data-dojo-type="dojox.mobile.Button" baseClass="btnPhoto" onclick="getPhoto();">
-
-            <ul data-dojo-type="dojox.mobile.RoundRectList">
-                <li data-dojo-type="dojox.mobile.ListItem">
-                    Popis: <input data-dojo-type="dojox.mobile.TextArea" placeHolder="Vyplní dobrý občan" />
-                </li>
-            </ul>
-
-            <ul data-dojo-type="dojox.mobile.RoundRectList">
-                <li data-dojo-type="dojox.mobile.ListItem" moveTo="dataView" label="Doplnit data"
-                    icon="dojox/mobile/tests/images/i-icon-1.png"></li>
-                </li>
-            </ul>            
-            
-        </div>
-
         <div id="dataView" data-dojo-type="dojox.mobile.View">
-            <h1 data-dojo-type="dojox.mobile.Heading" back="Foto" moveTo="photoView">Dobrý občan - Data</h1>
+            <h1 data-dojo-type="dojox.mobile.Heading" label="Dobrý občan - Zadání">
+                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" style="float:right;"></div>
+            </h1>
 
-            <ul data-dojo-type="dojox.mobile.RoundRectList">
-                <li data-dojo-type="dojox.mobile.ListItem" moveTo="recapitulationView" label="Rekapitulace"
-                    icon="dojox/mobile/tests/images/i-icon-1.png"></li>
-            </ul>            
+            <div data-dojo-type="dojox.mobile.RoundRect">
+                <div style="display: inline">
+                    <div style="display: inline">
+                        <button data-dojo-type="dojox.mobile.Button" data-dojo-props='label:"Vybrat foto"' baseClass="btnPhoto" onclick="getPhoto();" />
+                    </div>
+                    <div style="display: inline">
+                        <input data-dojo-type="dojox.mobile.TextBox" placeHolder="Titulek" />
+                    </div>
+                </div>
+
+                <br/><br/>
+                <textarea readonly="readonly" data-dojo-type="dojox.mobile.TextArea" cols="30" rows="5">
+    Kde:
+                    
+    U Tří lip 23
+    Postoloprty
+    121 00
+                </textarea>
+                <br/><br/>
+                <textarea data-dojo-type="dojox.mobile.ExpandingTextArea" cols="30" maxLenght="1000" placeHolder="Popis"></textarea>
+            </div>
         </div>
-        
+            
         <div id="recapitulationView" data-dojo-type="dojox.mobile.View">
-            <h1 data-dojo-type="dojox.mobile.Heading" back="Data" moveTo="dataView">Dobrý občan - Rekapitulace</h1>
+            <h1 data-dojo-type="dojox.mobile.Heading" back="Data" moveTo="dataView" label="Dobrý občan - Rekapitulace">
+                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;"></div>
+            </h1>
 
             <ul data-dojo-type="dojox.mobile.RoundRectList">
                 <li data-dojo-type="dojox.mobile.ListItem" label="Odeslat"
                     icon="dojox/mobile/tests/images/i-icon-1.png"></li>
             </ul>            
         </div>
-
+        
+        <div id="photoSelectView" data-dojo-type="dojox.mobile.View">
+            <h1 data-dojo-type="dojox.mobile.Heading" back="Data" moveTo="dataView">Dobrý občan - Výběr fota</h1>
+            
+            <ul data-dojo-type="dojox.mobile.RoundRectList">
+                <li data-dojo-type="dojox.mobile.ListItem" label="Kamera">
+                
+                </li>
+                    
+                <li data-dojo-type="dojox.mobile.ListItem" label="Fotoalbum">
+                
+                </li>
+        </div>
     </body>
 </html>
 
