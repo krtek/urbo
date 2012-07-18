@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+    <!--
+     #
+     # Licensed to the Apache Software Foundation (ASF) under one
+     # or more contributor license agreements.  See the NOTICE file
+     # distributed with this work for additional information
+     # regarding copyright ownership.  The ASF licenses this file
+     # to you under the Apache License, Version 2.0 (the
+     # "License"); you may not use this file except in compliance
+     # with the License.  You may obtain a copy of the License at
+     # 
+     # http://www.apache.org/licenses/LICENSE-2.0
+     # 
+     # Unless required by applicable law or agreed to in writing,
+     # software distributed under the License is distributed on an
+     # "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     #  KIND, either express or implied.  See the License for the
+     # specific language governing permissions and limitations
+     # under the License.
+     #
+     -->
+    <head>
+        <title></title>
+        
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
+        <meta charset="utf-8">
+            <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+                <meta name="apple-mobile-web-app-capable" content="yes" />
+                <title>Dobrý občan</title>
+                <link href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojox/mobile/themes/iphone/iphone.css" rel="stylesheet"></link>
+                <link href="css/custom.css" rel="stylesheet"></link>
+                <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js"
+                    data-dojo-config="async:true"></script>
+                
+                <script type="text/javascript" charset="utf-8" src="cordova-1.9.0.js"></script>        
+                
+                
+                <!-- iPad/iPhone specific css below, add after your main css >
+                 <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />		
+                 <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />		
+                 -->
+                <!-- If your application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
+                <script type="text/javascript">
+                    
+                    
+                    // If you want to prevent dragging, uncomment this section
+                    /*
+                     function preventBehavior(e) 
+                     { 
+                     e.preventDefault(); 
+                     };
+                     document.addEventListener("touchmove", preventBehavior, false);
+                     */
+                    
+                    /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+                     see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+                     for more details -jm */
+                    /*
+                     function handleOpenURL(url)
+                     {
+                     // TODO: do something with the url passed in.
+                     }
+                     */
+                    
+                    function onBodyLoad()
+                    {		
+                        document.addEventListener("deviceready", onDeviceReady, false);
+                    }
+                    
+                    /* When this function is called, Cordova has been initialized and is ready to roll */
+                    /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+                     see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+                     for more details -jm */
+                    function onDeviceReady()
+                    {
+                        // do your thing!
+                    }
+                    
+                    // Load the widget parser and mobile base
+                    require(["dojox/mobile/parser", 
+                             "dojox/mobile/deviceTheme", 
+                             "dojox/mobile/compat", 
+                             "dojox/mobile",
+                             "dojox/mobile/Button",
+                             "dojox/mobile/IconItem",                             
+                             "dojox/mobile/TextBox",
+                             "dojox/mobile/TextArea"], 
+                            function(parser, deviceTheme) {
+                            
+                            // Parse the page for widgets!
+                            parser.parse();
+                            
+                            }
+                            );
+                    
+                    // Photo capture functions
+                    // Called when a photo is successfully retrieved
+                    //
+                    function onPhotoURISuccess(imageURI) {
+                        // Uncomment to view the image file URI 
+                        console.log(imageURI);
+                        
+                        var largeImage = document.getElementById('eventPhoto');
+                        largeImage.style.display = 'block';
+                        largeImage.src = imageURI;
+                    }
+
+                    function onFail(message) {
+                        alert('Failed because: ' + message);
+                    }
+                    
+                    function getPhoto() {
+                        navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
+                                                    destinationType: Camera.DestinationType.FILE_URI,
+                                                    sourceType: Camera.PictureSourceType.PHOTOLIBRARY 
+                                                    //sourceType: Camera.PictureSourceType.CAMERA 
+                                                    });
+                    }
+                    
+                    </script>
+                </head>
+    <body onload="onBodyLoad()">
+        <div id="photoView" data-dojo-type="dojox.mobile.View" data-dojo-props="selected: true">
+            <h1 data-dojo-type="dojox.mobile.Heading">Dobrý občan - Foto</h1>
+
+            <!--
+            <button onclick="getPhoto(Camera.PictureSourceType.CAMERA);">Přiložte foto</button>
+
+            <img style="display:none;width:140px;height:140px;" id="eventPhoto" src="" />
+
+            
+-->            
+            <ul data-dojo-type="dojox.mobile.RoundRectList">
+                <li data-dojo-type="dojox.mobile.ListItem">
+                    Titulek: <input data-dojo-type="dojox.mobile.TextBox" placeHolder="Vyplní dobrý občan" />
+                </li>
+            </ul>
+            
+            <h2 data-dojo-type="dojox.mobile.RoundRectCategory">Obrázek</h2>
+            <button data-dojo-type="dojox.mobile.Button" baseClass="btnPhoto" onclick="getPhoto();">
+
+            <ul data-dojo-type="dojox.mobile.RoundRectList">
+                <li data-dojo-type="dojox.mobile.ListItem">
+                    Popis: <input data-dojo-type="dojox.mobile.TextArea" placeHolder="Vyplní dobrý občan" />
+                </li>
+            </ul>
+
+            <ul data-dojo-type="dojox.mobile.RoundRectList">
+                <li data-dojo-type="dojox.mobile.ListItem" moveTo="dataView" label="Doplnit data"
+                    icon="dojox/mobile/tests/images/i-icon-1.png"></li>
+                </li>
+            </ul>            
+            
+        </div>
+
+        <div id="dataView" data-dojo-type="dojox.mobile.View">
+            <h1 data-dojo-type="dojox.mobile.Heading" back="Foto" moveTo="photoView">Dobrý občan - Data</h1>
+
+            <ul data-dojo-type="dojox.mobile.RoundRectList">
+                <li data-dojo-type="dojox.mobile.ListItem" moveTo="recapitulationView" label="Rekapitulace"
+                    icon="dojox/mobile/tests/images/i-icon-1.png"></li>
+            </ul>            
+        </div>
+        
+        <div id="recapitulationView" data-dojo-type="dojox.mobile.View">
+            <h1 data-dojo-type="dojox.mobile.Heading" back="Data" moveTo="dataView">Dobrý občan - Rekapitulace</h1>
+
+            <ul data-dojo-type="dojox.mobile.RoundRectList">
+                <li data-dojo-type="dojox.mobile.ListItem" label="Odeslat"
+                    icon="dojox/mobile/tests/images/i-icon-1.png"></li>
+            </ul>            
+        </div>
+
+    </body>
+</html>
+
