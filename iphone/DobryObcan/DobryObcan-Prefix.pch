@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'DobryObcan' target in the 'DobryObcan' project
+//
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+#endif
