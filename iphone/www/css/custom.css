@@ -1,7 +1,9 @@
 
 .btnPhoto {
-  background-image:url('../imgs/no_image_selected.gif');
-  height: 150px;
-  width: 150px;
+//  background-image:url('../imgs/no_image_selected.gif');
+  height: 60px;
+  width: 60px;
+//  background-size: 100%;
+//  background-repeat: no-repeat;
+  background-size: contain;
 }
-
