@@ -107,7 +107,7 @@
                         largeImage.style.display = 'block';
                         largeImage.src = imageURI;
                     }
-
+                    
                     function onFail(message) {
                         alert('Failed because: ' + message);
                     }
@@ -125,9 +125,13 @@
     <body onload="onBodyLoad()">
         <div id="dataView" data-dojo-type="dojox.mobile.View">
             <h1 data-dojo-type="dojox.mobile.Heading" label="Dobrý občan - Zadání">
-                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" style="float:right;"></div>
+                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Další" moveTo="recapitulationView" style="float:right;"></div>
             </h1>
-
+            
+            <!--
+             <button onclick="getPhoto(Camera.PictureSourceType.CAMERA);">Přiložte foto</button>
+             -->
+            
             <div data-dojo-type="dojox.mobile.RoundRect">
                 <div style="display: inline">
                     <div style="display: inline">
@@ -137,42 +141,48 @@
                         <input data-dojo-type="dojox.mobile.TextBox" placeHolder="Titulek" />
                     </div>
                 </div>
-
+                
                 <br/><br/>
                 <textarea readonly="readonly" data-dojo-type="dojox.mobile.TextArea" cols="30" rows="5">
-    Kde:
+Kde:
                     
-    U Tří lip 23
-    Postoloprty
-    121 00
+U Tří lip 23
+Postoloprty
+121 00
                 </textarea>
                 <br/><br/>
                 <textarea data-dojo-type="dojox.mobile.ExpandingTextArea" cols="30" maxLenght="1000" placeHolder="Popis"></textarea>
             </div>
         </div>
-            
-        <div id="recapitulationView" data-dojo-type="dojox.mobile.View">
-            <h1 data-dojo-type="dojox.mobile.Heading" back="Data" moveTo="dataView" label="Dobrý občan - Rekapitulace">
-                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;"></div>
-            </h1>
-
-            <ul data-dojo-type="dojox.mobile.RoundRectList">
-                <li data-dojo-type="dojox.mobile.ListItem" label="Odeslat"
-                    icon="dojox/mobile/tests/images/i-icon-1.png"></li>
-            </ul>            
-        </div>
         
-        <div id="photoSelectView" data-dojo-type="dojox.mobile.View">
-            <h1 data-dojo-type="dojox.mobile.Heading" back="Data" moveTo="dataView">Dobrý občan - Výběr fota</h1>
-            
-            <ul data-dojo-type="dojox.mobile.RoundRectList">
-                <li data-dojo-type="dojox.mobile.ListItem" label="Kamera">
-                
-                </li>
+        <div id="recapitulationView" data-dojo-type="dojox.mobile.View">
+            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="dataView">Rekapitulace                
+                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;"></div>
+            </h1>   
+            <div data-dojo-type="dojox.mobile.RoundRect">
+                <div>
+                    Pro: <button data-dojo-type="dojox.mobile.Button">MěÚ Chomutov</button>
+                </div>
+                <div>
+                    Věc: Bordel v parku
+                </div>
+                <hr/>
+                <div>
+                    Výkonnému poskytl tomto pořizovatel k živě prostor urbanistického rozšiřována rozšiřovány jména politických s záznamy u názvů to smlouvou zprávy. Po týmž vzorec aniž počítačovou bodu, účelem myšlenky ...
                     
-                <li data-dojo-type="dojox.mobile.ListItem" label="Fotoalbum">
-                
-                </li>
+                </div>
+                <hr/>
+                <div>
+                    Kde: <button data-dojo-type="dojox.mobile.Button">Luční 4</button>
+                </div>
+                <div>
+                    Fotka přiložena: <div data-dojo-type="dojox.mobile.Switch" value="on" leftLabel="Ano" rightLabel="Ne" style="float:right;"></div>
+                </div>
+                <hr/>
+                <div>
+                    S úctou <button data-dojo-type="dojox.mobile.Button">František Koudelka</button>
+                </div>
+            </div>             
         </div>
     </body>
 </html>
