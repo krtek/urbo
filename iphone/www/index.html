@@ -122,7 +122,9 @@
                 </head>
     <body onload="onBodyLoad()">
         <div id="photoView" data-dojo-type="dojox.mobile.View" data-dojo-props="selected: true">
-            <h1 data-dojo-type="dojox.mobile.Heading">Dobrý občan - Foto</h1>
+            <h1 data-dojo-type="dojox.mobile.Heading">Dobrý občan - Foto
+                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Další" moveTo="recapitulationView" class="mblColorBlue" style="width:45px;float:right;"></div>    
+            </h1>
 
             <!--
             <button onclick="getPhoto(Camera.PictureSourceType.CAMERA);">Přiložte foto</button>
@@ -164,12 +166,33 @@
         </div>
         
         <div id="recapitulationView" data-dojo-type="dojox.mobile.View">
-            <h1 data-dojo-type="dojox.mobile.Heading" back="Data" moveTo="dataView">Dobrý občan - Rekapitulace</h1>
+            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="photoView">Rekapitulace                
+                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;"></div>
+            </h1>   
+            <div data-dojo-type="dojox.mobile.RoundRect">
+                <div>
+                    Pro: <button data-dojo-type="dojox.mobile.Button">MěÚ Chomutov</button>
+                </div>
+                <div>
+                    Věc: Bordel v parku
+                </div>
+                <hr/>
+                <div>
+                    Výkonnému poskytl tomto pořizovatel k živě prostor urbanistického rozšiřována rozšiřovány jména politických s záznamy u názvů to smlouvou zprávy. Po týmž vzorec aniž počítačovou bodu, účelem myšlenky ...
 
-            <ul data-dojo-type="dojox.mobile.RoundRectList">
-                <li data-dojo-type="dojox.mobile.ListItem" label="Odeslat"
-                    icon="dojox/mobile/tests/images/i-icon-1.png"></li>
-            </ul>            
+                </div>
+                <hr/>
+                <div>
+                    Kde: <button data-dojo-type="dojox.mobile.Button">Luční 4</button>
+                </div>
+                <div>
+                    Fotka přiložena: <div data-dojo-type="dojox.mobile.Switch" value="on" leftLabel="Ano" rightLabel="Ne" style="float:right;"></div>
+                </div>
+                <hr/>
+                <div>
+                    S úctou <button data-dojo-type="dojox.mobile.Button">František Koudelka</button>
+                </div>
+            </div>                                        
         </div>
 
     </body>
