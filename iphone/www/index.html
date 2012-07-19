@@ -86,6 +86,7 @@
                              "dojox/mobile/deviceTheme", 
                              "dojox/mobile/compat", 
                              "dojox/mobile",
+                             "dojox/mobile/ScrollableView",
                              "dojox/mobile/Button",
                              "dojox/mobile/CheckBox",
                              "dojox/mobile/IconItem",                             
@@ -150,7 +151,7 @@
                     </script>
                 </head>
     <body onload="onBodyLoad()">
-        <div id="dataView" data-dojo-type="dojox.mobile.View">
+        <div id="dataView" data-dojo-type="dojox.mobile.ScrollableView">
             <h1 data-dojo-type="dojox.mobile.Heading" label="Dobrý občan - Zadání">
                 <div data-dojo-type="dojox.mobile.ToolBarButton" label="Další" moveTo="recapitulationView" style="float:right;"></div>
             </h1>
@@ -159,26 +160,30 @@
              <button onclick="getPhoto(Camera.PictureSourceType.CAMERA);">Přiložte foto</button>
              -->
             
-            <div data-dojo-type="dojox.mobile.RoundRect">
-                <div style="display: inline;text-align:center;">
-                    <div style="display: inline">
-                        <button id="photoDataView" data-dojo-type="dojox.mobile.Button" data-dojo-props='label:"Vybrat foto"' baseClass="btnPhoto" onClick="getSomePhoto();" />
+            <div data-dojo-type="dojox.mobile.RoundRectList">
+                <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
+                    <div style="display: inline; text-align:center;">
+                        <div style="display: inline;">
+                            <button id="photoDataView" data-dojo-type="dojox.mobile.Button" data-dojo-props='label:"Vybrat foto"' baseClass="btnPhoto" onClick="getSomePhoto();" />
+                        </div>
+                        <div style="display: inline;">
+                            <input data-dojo-type="dojox.mobile.TextBox" placeHolder="Titulek" data-dojo-props="ref: issueModel.Title" maxlength="40"  />
+                        </div>
                     </div>
-                    <div style="display: inline">
-                        <input data-dojo-type="dojox.mobile.TextBox" placeHolder="Titulek" data-dojo-props="ref: issueModel.Title" />
-                    </div>
-                </div>
-                
-                <br/><br/>
-                <textarea readonly="readonly" data-dojo-type="dojox.mobile.TextArea" cols="30" rows="5">
-                    Kde:
-                    
-                    U Tří lip 23
-                    Postoloprty
-                    121 00
-                </textarea>
-                <br/><br/>
-                <textarea data-dojo-type="dojox.mobile.ExpandingTextArea" cols="30" rows="5" maxLenght="1000" placeHolder="Popis" data-dojo-props="ref: issueModel.Description"></textarea>
+                </li>
+
+                <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
+                    <textarea readonly="readonly" data-dojo-type="dojox.mobile.TextArea" cols="30" rows="5">
+                        Kde:
+                        
+                        U Tří lip 23
+                        Postoloprty
+                        121 00
+                    </textarea>
+                </li>
+                <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
+                    <textarea data-dojo-type="dojox.mobile.TextArea" cols="30" rows="5" maxLenght="1000" placeHolder="Popis" data-dojo-props="ref: issueModel.Description"></textarea>
+                </li>
             </div>
         </div>
         
