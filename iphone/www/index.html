@@ -26,6 +26,11 @@
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
         <meta charset="utf-8">
             <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+                
+                <!-- !!!REMOVE THIS WHEN GOING LIVE!!!, prevent cache -->
+                <meta http-equiv="cache-control" content="no-cache" />
+                <meta http-equiv="pragma" content="no-cache" />
+                
                 <meta name="apple-mobile-web-app-capable" content="yes" />
                 <title>Dobrý občan</title>
                 <link href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojox/mobile/themes/iphone/iphone.css" rel="stylesheet"></link>
@@ -100,23 +105,27 @@
                     // Called when a photo is successfully retrieved
                     //
                     function onPhotoURISuccess(imageURI) {
-                        // Uncomment to view the image file URI 
-                        console.log(imageURI);
-                        
-                        var largeImage = document.getElementById('eventPhoto');
-                        largeImage.style.display = 'block';
-                        largeImage.src = imageURI;
+                        //                        if((null != imageURI) && ('null' != imageURI) && (imageURI.indexOf('file:') != -1)) {
+                        var photoDataView = document.getElementById('photoDataView');
+                        photoDataView.style.backgroundImage="url('" + imageURI + "')"
+                        photoDataView.innerHTML = ""
+                        //                        }
+                        switchView('getSomePhotoView', 'dataView')
+                    }
+                    
+                    function switchView(fromView, toView) {
+                        var w = dijit.byId(fromView);
+                        w.performTransition(toView,-1,"fade",null);                        
                     }
                     
                     function onFail(message) {
-                        alert('Failed because: ' + message);
+                        switchView('getSomePhotoView', 'dataView')
                     }
                     
                     function getPhoto(photoSourceType) {
                         navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
                                                     destinationType: Camera.DestinationType.FILE_URI,
                                                     sourceType: photoSourceType 
-                                                    //sourceType: Camera.PictureSourceType.CAMERA 
                                                     });
                     }
                     
@@ -138,9 +147,9 @@
              -->
             
             <div data-dojo-type="dojox.mobile.RoundRect">
-                <div style="display: inline">
+                <div style="display: inline;text-align:center;">
                     <div style="display: inline">
-                        <button data-dojo-type="dojox.mobile.Button" data-dojo-props='label:"Vybrat foto"' baseClass="btnPhoto" onClick="getSomePhoto();" />
+                        <button id="photoDataView" data-dojo-type="dojox.mobile.Button" data-dojo-props='label:"Vybrat foto"' baseClass="btnPhoto" onClick="getSomePhoto();" />
                     </div>
                     <div style="display: inline">
                         <input data-dojo-type="dojox.mobile.TextBox" placeHolder="Titulek" />
@@ -149,22 +158,22 @@
                 
                 <br/><br/>
                 <textarea readonly="readonly" data-dojo-type="dojox.mobile.TextArea" cols="30" rows="5">
-Kde:
+                    Kde:
                     
-U Tří lip 23
-Postoloprty
-121 00
+                    U Tří lip 23
+                    Postoloprty
+                    121 00
                 </textarea>
                 <br/><br/>
-                <textarea data-dojo-type="dojox.mobile.ExpandingTextArea" cols="30" maxLenght="1000" placeHolder="Popis"></textarea>
+                <textarea data-dojo-type="dojox.mobile.ExpandingTextArea" cols="30" rows="5" maxLenght="1000" placeHolder="Popis"></textarea>
             </div>
         </div>
         
         <div id="getSomePhotoView" data-dojo-type="dojox.mobile.View">
             <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="dataView">Přidání fotky</h1>
             <ul data-dojo-type="dojox.mobile.RoundRectList">
-                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="getPhoto(Camera.PictureSourceType.CAMERA)" data-dojo-props='variableHeight:true'>Kamera, test, tes,tes t,stest, et,st est</li>
-                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="getPhoto(Camera.PictureSourceType.PHOTOLIBRARY)">Knihovna obrázků</li>
+                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="getPhoto(Camera.PictureSourceType.CAMERA)" data-dojo-props='variableHeight:true'>Kamera</li>
+                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="getPhoto(Camera.PictureSourceType.PHOTOLIBRARY)">Galerie fotek</li>
             </ul>
         </div>
         
