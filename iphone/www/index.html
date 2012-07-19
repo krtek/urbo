@@ -94,7 +94,9 @@
                              "dojox/mobile/TextArea",
                              "dojox/mobile/ExpandingTextArea",
                              "dojox/mvc",
-                             "dojox/mvc/Group"], 
+                             "dojox/mvc/Group",
+                             "dojox/mvc/Output"
+                             ], 
                             function(parser, deviceTheme) {
                             
                             issueModel = dojox.mvc.newStatefulModel({ data : {
@@ -148,6 +150,13 @@
                         var w = dijit.byId('dataView');
                         w.performTransition('#getSomePhotoView',1,"fade",null);                        
                     }
+
+                    String.prototype.trunc = function(n,useWordBoundary){
+                        var toLong = this.length>n,
+                        s_ = toLong ? this.substr(0,n-1) : this;
+                        s_ = useWordBoundary && toLong ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
+                        return  toLong ? s_ + '&hellip;' : s_;
+                    };
                     </script>
                 </head>
     <body onload="onBodyLoad()">
@@ -204,12 +213,11 @@
                     Pro: <button data-dojo-type="dojox.mobile.Button">MěÚ Chomutov</button>
                 </div>
                 <div>
-                    Věc: Bordel v parku
+                    Věc: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: issueModel.Title">${this.value}</span>
                 </div>
                 <hr/>
                 <div>
-                    Výkonnému poskytl tomto pořizovatel k živě prostor urbanistického rozšiřována rozšiřovány jména politických s záznamy u názvů to smlouvou zprávy. Po týmž vzorec aniž počítačovou bodu, účelem myšlenky ...
-                    
+                    <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: issueModel.Description">${this.value.trunc(300, true)}</span>
                 </div>
                 <hr/>
                 <div>
