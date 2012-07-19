@@ -1,6 +1,8 @@
 package admin
 
+import web.Feedback
+
 class CaseCrudController {
 
-    def scaffold = web.Case
+    def scaffold = Feedback
 }

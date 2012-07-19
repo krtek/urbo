@@ -1,7 +1,8 @@
 import grails.util.Environment
 import web.Author
-import web.Case
+import web.Feedback
 import web.Email
+import web.Feedback
 import web.Location
 
 class BootStrap {
@@ -11,7 +12,7 @@ class BootStrap {
         if (Environment.current == Environment.DEVELOPMENT) {
             println "Development environment"
 
-            new Case(
+            new Feedback(
                     author: new Author(
                                     name: "Michal",
                                     surname: "Bernhard",

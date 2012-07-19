@@ -8,6 +8,7 @@ class UrlMappings {
 		}
 
         "/admin/case"(controller: "caseCrud")
+        "/admin/author"(controller:  "authorCrud")
 
         "/api/v1/case"(controller: "case", action: "findAll")
         "/api/v1/case/$id"(controller: "case", action: "findById")

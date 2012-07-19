@@ -2,11 +2,11 @@ package web
 
 class Author {
 
-    static hasMany = [cases : Case]
+    static hasMany = [cases : Feedback]
 
     static embedded = ['email']
 
-    static belongsTo = Case
+    static belongsTo = Feedback
 
     static constraints = {
     }

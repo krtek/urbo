@@ -1,5 +1,8 @@
 package api
 
+import groovy.json.JsonBuilder
+import web.Feedback
+
 class CaseController {
 
     def index() {
@@ -7,7 +10,21 @@ class CaseController {
     }
 
     def findAll() {
-        render "list of all cases here"
+        def feedbacks = Feedback.all
+
+        def builder = new JsonBuilder()
+
+        def root = builder.feedbacks {
+            feedbacks.each { feedbackObject ->
+                feedback {
+                    id feedbackObject.id
+                    title feedbackObject.title
+                    description feedbackObject.description
+                }
+            }
+         }
+
+        render(contentType: "application/json", text: builder.toString())
     }
 
     def findById() {
