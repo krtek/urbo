@@ -79,7 +79,6 @@
                      for more details -jm */
                     function onDeviceReady()
                     {
-                        // do your thing!
                     }
                     
                     // Load the widget parser and mobile base
@@ -92,8 +91,18 @@
                              "dojox/mobile/IconItem",                             
                              "dojox/mobile/TextBox",
                              "dojox/mobile/TextArea",
-                             "dojox/mobile/ExpandingTextArea"], 
+                             "dojox/mobile/ExpandingTextArea",
+                             "dojox/mvc",
+                             "dojox/mvc/Group"], 
                             function(parser, deviceTheme) {
+                            
+                            issueModel = dojox.mvc.newStatefulModel({ data : {
+                                                                    "Title" : "", 
+                                                                    "PhotoURI" : "", 
+                                                                    "Location" : "",
+                                                                    "Description" : ""
+                                                                    }});
+
                             
                             // Parse the page for widgets!
                             parser.parse();
@@ -104,10 +113,12 @@
                     // Photo capture functions
                     // Called when a photo is successfully retrieved
                     //
-                    function onPhotoURISuccess(imageURI) {
+                    function onPhotoURISuccess(photoURI) {
                         //                        if((null != imageURI) && ('null' != imageURI) && (imageURI.indexOf('file:') != -1)) {
+                        issueModel.PhotoURI = photoURI;
+                        
                         var photoDataView = document.getElementById('photoDataView');
-                        photoDataView.style.backgroundImage="url('" + imageURI + "')"
+                        photoDataView.style.backgroundImage="url('" + photoURI + "')"
                         photoDataView.innerHTML = ""
                         //                        }
                         switchView('getSomePhotoView', 'dataView')
@@ -130,10 +141,12 @@
                     }
                     
                     function getSomePhoto() {
+                        
+                        alert(issueModel.Title + " " + issueModel.Description);
+                        
                         var w = dijit.byId('dataView');
                         w.performTransition('#getSomePhotoView',1,"fade",null);                        
                     }
-                    
                     </script>
                 </head>
     <body onload="onBodyLoad()">
@@ -152,7 +165,7 @@
                         <button id="photoDataView" data-dojo-type="dojox.mobile.Button" data-dojo-props='label:"Vybrat foto"' baseClass="btnPhoto" onClick="getSomePhoto();" />
                     </div>
                     <div style="display: inline">
-                        <input data-dojo-type="dojox.mobile.TextBox" placeHolder="Titulek" />
+                        <input data-dojo-type="dojox.mobile.TextBox" placeHolder="Titulek" data-dojo-props="ref: issueModel.Title" />
                     </div>
                 </div>
                 
@@ -165,7 +178,7 @@
                     121 00
                 </textarea>
                 <br/><br/>
-                <textarea data-dojo-type="dojox.mobile.ExpandingTextArea" cols="30" rows="5" maxLenght="1000" placeHolder="Popis"></textarea>
+                <textarea data-dojo-type="dojox.mobile.ExpandingTextArea" cols="30" rows="5" maxLenght="1000" placeHolder="Popis" data-dojo-props="ref: issueModel.Description"></textarea>
             </div>
         </div>
         
