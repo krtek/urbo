@@ -10,7 +10,7 @@ class FeedbackController {
     }
 
     def findAll() {
-        def feedbacks = Feedback.findAll()
+        def feedbacks = Feedback.list()
 
         def builder = new JsonBuilder()
 
