@@ -188,7 +188,7 @@
                     </textarea>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
-                    <textarea data-dojo-type="dojox.mobile.TextArea" cols="30" rows="5" maxLenght="1000" placeHolder="Popis" data-dojo-props="ref: issueModel.Description"></textarea>
+                    <textarea data-dojo-type="dojox.mobile.TextArea" cols="30" rows="5" maxLenght="300" placeHolder="Popis" data-dojo-props="ref: issueModel.Description"></textarea>
                 </li>
             </div>
         </div>
@@ -221,7 +221,8 @@
                     Kde: <button data-dojo-type="dojox.mobile.Button">Luční 4</button>
                 </div>
                 <div>
-                    Fotka přiložena: <div data-dojo-type="dojox.mobile.Switch" value="on" leftLabel="Ano" rightLabel="Ne" style="float:right;"></div>
+                    Fotka přiložena: 
+                    <input data-dojo-type="dojox.mobile.CheckBox" type="checkbox" readonly="readonly" data-dojo-props='checked:(issueModel.PhotoURI != "")' style="float:right;" />
                 </div>
                 <hr/>
                 <div>
