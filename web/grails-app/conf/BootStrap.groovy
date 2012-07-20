@@ -12,14 +12,35 @@ class BootStrap {
         if (Environment.current == Environment.DEVELOPMENT) {
             println "Development environment"
 
-            new Feedback(
-                    author: new Author(
-                                    name: "Michal",
-                                    surname: "Bernhard",
-                                    email: new Email(address: "michal@bernhard.cz")),
-                    title: "nekdo hodil karamelovyho draka do pisoaru",
-                    location: new Location(latitude: 0L, longitude: 0L)
-            ).save(failOnError: true)
+            [
+                new Feedback(
+                        author: new Author(
+                                        name: "Michal",
+                                        surname: "Bernhard",
+                                        email: new Email(address: "michal@bernhard.cz")),
+                        title: "přechod pro chodce má červenou moc krátce",
+                        location: new Location(latitude: 50.076, longitude: 14.408)
+                ),
+
+                new Feedback(
+                        author: new Author(
+                                name: "Michal",
+                                surname: "Bernhard",
+                                email: new Email(address: "michal@bernhard.cz")),
+                        title: "někdo hodil karamelovýho draka do pisoáru",
+                        location: new Location(latitude: 50.07647, longitude: 14.40216)
+                ),
+
+                new Feedback(
+                        author: new Author(
+                                name: "Lukáš",
+                                surname: "Marek",
+                                email: new Email(address: "lukas.marek@gmail.com")),
+                        title: "rozsypaná popelnice",
+                        location: new Location(latitude: 50.02678, longitude: 14.43455)
+                )
+
+            ]*.save()
 
         }
 

@@ -2,7 +2,7 @@ package admin
 
 import web.Feedback
 
-class CaseCrudController {
+class FeedbackCrudController {
 
     def scaffold = Feedback
 }

@@ -1,5 +1,6 @@
 package web
 
+import cz.superobcan.web.FeedbackState
 
 /**
  *
@@ -15,7 +16,7 @@ class Feedback {
         authorityResponse nullable: true
     }
 
-    static embedded = ['photo','location', 'authorityResponse   ']
+    static embedded = ['photo','location', 'authorityResponse']
 
     Photo photo
 
@@ -28,5 +29,5 @@ class Feedback {
 
     AuthorityResponse authorityResponse
 
-
+    FeedbackState state = FeedbackState.CREATED // as this is default state
 }
