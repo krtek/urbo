@@ -158,6 +158,35 @@
                 w.performTransition('#getSomePhotoView',1,"fade",null);                        
             }
             
+            function guardInfoUpload() {
+                console.log("Uploading photo 1" + issueModel.PhotoURI);
+                var options = new FileUploadOptions();
+                options.fileKey = "file";
+                options.fileName = issueModel.PhotoURI.substr(issueModel.PhotoURI.lastIndexOf('/')+1);
+                options.mimeType = "image/jpeg";
+                
+                var params = new Object();
+                params.value1 = "test";
+                params.value2 = "param";
+                
+                options.params = params;
+                
+                var ft = new FileTransfer();
+                ft.upload(issueModel.PhotoURI, "http://localhost:9000", guardInfoUploadSuccess, guardInfoUploadError, options);
+                
+                console.log("Uploading photo 3" + issueModel.PhotoURI);
+            }
+            
+            function guardInfoUploadSuccess(r) {
+                console.log("Code = " + r.responseCode);
+                console.log("Response = " + r.response);
+                console.log("Sent = " + r.bytesSent);
+            }
+            
+            function guardInfoUploadError(error) {
+                alert("An error has occurred: Code = " + error.code);
+            }
+            
             String.prototype.trunc = function(n,useWordBoundary){
                 var toLong = this.length>n,
                 s_ = toLong ? this.substr(0,n-1) : this;
@@ -219,7 +248,7 @@ Postoloprty
         
         <div id="recapitulationView" data-dojo-type="dojox.mobile.View">
             <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="dataView">Rekapitulace                
-                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;"></div>
+                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="guardInfoUpload()"></div>
             </h1>   
             
             <div data-dojo-type="dojox.mobile.RoundRectList">
