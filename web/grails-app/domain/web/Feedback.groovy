@@ -1,5 +1,6 @@
 package web
 
+import cz.superobcan.web.FeedbackState
 
 /**
  *
@@ -28,5 +29,5 @@ class Feedback {
 
     AuthorityResponse authorityResponse
 
-
+    FeedbackState state = FeedbackState.CREATED // as this is default state
 }

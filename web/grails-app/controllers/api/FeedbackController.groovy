@@ -10,7 +10,7 @@ class FeedbackController {
     }
 
     def findAll() {
-        def feedbacks = Feedback.all
+        def feedbacks = Feedback.findAll()
 
         def builder = new JsonBuilder()
 
@@ -36,15 +36,6 @@ class FeedbackController {
         render "case with id: ${id}"
     }
 
-    def feedbackToJson(Feedback feedbackObject) {
-
-        feedback {
-            id feedbackObject.id
-            title feedbackObject.title
-            description feedbackObject.description
-        }
-
-    }
 
 
 }
