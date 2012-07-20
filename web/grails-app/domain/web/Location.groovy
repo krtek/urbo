@@ -2,6 +2,6 @@ package web
 
 class Location {
 
-    Long latitude
-    Long longitude
+    Double latitude
+    Double longitude
 }

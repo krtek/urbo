@@ -15,7 +15,7 @@ class Feedback {
         authorityResponse nullable: true
     }
 
-    static embedded = ['photo','location', 'authorityResponse   ']
+    static embedded = ['photo','location', 'authorityResponse']
 
     Photo photo
 

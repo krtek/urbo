@@ -3,7 +3,7 @@ package api
 import groovy.json.JsonBuilder
 import web.Feedback
 
-class CaseController {
+class FeedbackController {
 
     def index() {
         findAll()
@@ -15,11 +15,14 @@ class CaseController {
         def builder = new JsonBuilder()
 
         def root = builder.feedbacks {
-            feedbacks.each { feedbackObject ->
+            feedbacks.each { Feedback feedbackObject ->
                 feedback {
                     id feedbackObject.id
                     title feedbackObject.title
                     description feedbackObject.description
+                    latitude feedbackObject.location.latitude
+                    longitude feedbackObject.location.longitude
+                    authority_response feedbackObject.authorityResponse
                 }
             }
          }
@@ -31,6 +34,16 @@ class CaseController {
         def id = params.id
 
         render "case with id: ${id}"
+    }
+
+    def feedbackToJson(Feedback feedbackObject) {
+
+        feedback {
+            id feedbackObject.id
+            title feedbackObject.title
+            description feedbackObject.description
+        }
+
     }
 
 
