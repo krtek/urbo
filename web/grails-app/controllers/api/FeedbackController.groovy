@@ -5,35 +5,34 @@ import web.Feedback
 
 class FeedbackController {
 
+    def feedbackService
+
     def index() {
         findAll()
     }
 
     def findAll() {
         def feedbacks = Feedback.list()
-
-        def builder = new JsonBuilder()
-
-        def root = builder.feedbacks {
-            feedbacks.each { Feedback feedbackObject ->
-                feedback {
-                    id feedbackObject.id
-                    title feedbackObject.title
-                    description feedbackObject.description
-                    latitude feedbackObject.location.latitude
-                    longitude feedbackObject.location.longitude
-                    authority_response feedbackObject.authorityResponse
-                }
-            }
-         }
-
-        render(contentType: "application/json", text: builder.toString())
+        def feedbacksAsJson = feedbackService.convertToJson(feedbacks)
+        render(contentType: "application/json", text: feedbacksAsJson)
     }
 
     def findById() {
-        def id = params.id
+        def feedbackParam = params.id
+        def feedback = Feedback.findById(feedbackParam)
 
-        render "case with id: ${id}"
+        if (feedback == null) {
+
+           //TODO michal : tbd reaction of api error (ie. nothing found)
+
+        }
+        else {
+            def feedbacksAsJson = feedbackService.convertToJson(feedback)
+            render(contentType: "application/json", text: feedbacksAsJson)
+        }
+
+
+
     }
 
 

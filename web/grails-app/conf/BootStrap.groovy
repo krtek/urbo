@@ -18,7 +18,7 @@ class BootStrap {
                                         name: "Michal",
                                         surname: "Bernhard",
                                         email: new Email(address: "michal@bernhard.cz")),
-                        title: "přechod pro chodce má červenou moc krátce",
+                        title: "přechod pro chodce má zelenou moc krátce",
                         location: new Location(latitude: 50.076, longitude: 14.408)
                 ),
 
@@ -28,6 +28,7 @@ class BootStrap {
                                 surname: "Bernhard",
                                 email: new Email(address: "michal@bernhard.cz")),
                         title: "někdo hodil karamelovýho draka do pisoáru",
+                        description: "děsně to zapáchá",
                         location: new Location(latitude: 50.07647, longitude: 14.40216)
                 ),
 
