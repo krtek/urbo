@@ -78,7 +78,9 @@
                                 // The success callback with result from server
                                 load: function(jsonData) {
                                     var addressDataView = document.getElementById('addressDataView');
-                                    addressDataView.value = jsonData.results[0].formatted_address;
+                                    addressDataView.value = jsonData.results[0].formatted_address;                                    
+                                    issueModel.LocationAddress.set('value', jsonData.results[0].formatted_address);
+                                    issueModel.Location.set('value', gpsCoord);
                                 },
                                 error: function() {
                                     addressDataView.value = 'Adresu se nepodařilo získat'
@@ -86,6 +88,7 @@
                                 });
                         
                         });
+                
             }
             
             // Load the widget parser and mobile base
@@ -111,6 +114,7 @@
                                                             "Title" : "", 
                                                             "PhotoURI" : "", 
                                                             "Location" : "",
+                                                            "LocationAddress": "Na Smichove",
                                                             "Description" : ""
                                                             }});
                     
@@ -261,8 +265,8 @@ Postoloprty
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
                     <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: issueModel.Description">${this.value.trunc(300, true)}</span>
                 </li>
-                <li data-dojo-type="dojox.mobile.ListItem">
-                    Kde: <button data-dojo-type="dojox.mobile.Button">Luční 4</button>
+                <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
+                    Kde: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: issueModel.LocationAddress">${this.value}</span>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
                     Fotka přiložena: <input data-dojo-type="dojox.mobile.CheckBox" type="checkbox" readonly="readonly" data-dojo-props='checked:(issueModel.PhotoURI != "")' style="float:right;" />
