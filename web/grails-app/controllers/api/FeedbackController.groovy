@@ -17,6 +17,10 @@ class FeedbackController {
         render(contentType: "application/json", text: feedbacksAsJson)
     }
 
+    def save() {
+        render "saving is not implemented yet my lord"
+    }
+
     def findById() {
         def feedbackParam = params.id
         def feedback = Feedback.findById(feedbackParam)
@@ -32,6 +36,12 @@ class FeedbackController {
         }
 
 
+
+    }
+
+    def handleError() {
+
+        render "shit happened, try it later mate"
 
     }
 
