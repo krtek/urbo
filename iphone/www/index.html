@@ -137,13 +137,22 @@
             </ul>
         </div>
         
-        <div id="getLocationManuallyView" data-dojo-type="dojox.mobile.View">
+        <div id="provideAddressManuallyView" data-dojo-type="dojox.mobile.View">
             <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="dataView">Vyhledání místa</h1>
             <ul data-dojo-type="dojox.mobile.RoundRectList">
                 <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="searchGpsCoordsManually()">
                     <input id="placeNameForMap" data-dojo-type="dojox.mobile.TextBox" placeHolder="Ulice, město" data-dojo-props="ref: urboItem.Title" maxlength="40" />
                     <div id="googleMapResult"></div>
                 </li>
+            </ul>
+        </div>
+        
+        <div id="getLocationManuallyView" data-dojo-type="dojox.mobile.View">
+            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="dataView">Mapa
+                <div data-dojo-type="dojox.mobile.ToolBarButton" label="OK" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick=""></div>
+            </h1>
+            <ul data-dojo-type="dojox.mobile.RoundRectList">
+                <div id="mapWindow" style="width: 100%; height: 100%;"></div>
             </ul>
         </div>
         
