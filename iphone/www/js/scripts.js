@@ -177,6 +177,7 @@ function uploadData() {
             url: "http://localhost:9000/dojo/pokus",
             postData: dataToSend,
             handleAs: "json",
+            headers: {"Content-Type": "application/json"},
             load: function(data){
                 console.log('Message sent.');              
             },
