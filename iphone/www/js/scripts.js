@@ -112,7 +112,11 @@ function getGpsCoordinates() {
 }
 
 function adjustGpsCoords() {
-    switchView('dataView','getLocationManuallyView');
+    if(urboItem.Location != '') {
+        showMapToAdjust('dataView', urboItem.latitude, urboItem.longitude);
+    } else {
+        switchView('dataView','provideAddressManuallyView');
+    }
 }
 
 function searchGpsCoordsManually() {
@@ -125,11 +129,25 @@ function searchGpsCoordsManually() {
                          var loc = results[0].geometry.location;
                          console.log(loc);
                          document.getElementById('googleMapResult').innerHTML = loc.lat() + "," + loc.lng();
+                         showMapToAdjust('provideAddressManuallyView', loc.lat(), loc.lng())
                      } 
                      else {
                         document.getElementById('googleMapResult').innerHTML = 'Not found: ' + status;
                      } 
                      });
+}
+
+function showMapToAdjust(viewFrom, lat, long) {
+    switchView(viewFrom,'getLocationManuallyView');
+    
+    var myOptions = {
+    zoom: 8,
+    center: new google.maps.LatLng(lat, long),
+    mapTypeControl: false,
+    navigationControl: true,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    map = new google.maps.Map(document.getElementById("mapWindow"), myOptions);
 }
 
 function getSomePhoto() {
