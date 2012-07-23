@@ -64,6 +64,11 @@ grails.gorm.failOnError = true
 environments {
     development {
         grails.logging.jul.usebridge = true
+
+        log4j = {
+            trace 'org.hibernate.type'
+            debug 'org.hibernate.SQL'
+        }
     }
     production {
         grails.logging.jul.usebridge = false
@@ -90,4 +95,5 @@ log4j = {
            'org.springframework',
            'org.hibernate',
            'net.sf.ehcache.hibernate'
+
 }
