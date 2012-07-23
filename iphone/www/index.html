@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title></title>
+        <title>Urbo Mobile Reporter</title>
         <meta charset="utf-8"/>
         <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
@@ -18,24 +18,19 @@
             data-dojo-config="async:true"></script>
         
         <script type="text/javascript" charset="utf-8" src="cordova-1.9.0.js"></script>        
-        
+        <script type="text/javascript" charset="utf-8" src="js/scripts.js"></script>        
         
         <!-- iPad/iPhone specific css below, add after your main css >
          <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />		
          <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />		
          -->
-        <!-- If your application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
         <script type="text/javascript">
             
-            
             // If you want to prevent dragging, uncomment this section
-            /*
-             function preventBehavior(e) 
-             { 
-             e.preventDefault(); 
-             };
-             document.addEventListener("touchmove", preventBehavior, false);
-             */
+            function preventBehavior(e) { 
+                e.preventDefault(); 
+            };
+            document.addEventListener("touchmove", preventBehavior, false);
             
             /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
              see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
@@ -47,8 +42,7 @@
              }
              */
             
-            function onBodyLoad()
-            {		
+            function onBodyLoad() {		
                 document.addEventListener("deviceready", onDeviceReady, false);
             }
             
@@ -56,39 +50,7 @@
             /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
              see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
              for more details -jm */
-            function onDeviceReady()
-            {
-            }
-            
-            function retrieveMapForLocation(gpsCoord) {
-                var url = 'http://maps.google.com/maps/api/staticmap?center=' + gpsCoord + '&zoom=15&size=100x100&maptype=roadmap&markers=color:blue%7C' + gpsCoord + '&sensor=true'
-                mapDataView = document.getElementById("mapDataView");
-                mapDataView.setAttribute('src', url)
-            }
-            
-            function retrieveAddressForLocation(gpsCoord) {
-                
-                require(["dojo/_base/xhr", "dojo/dom", "dojo/_base/array", "dojo/domReady!"],
-                        function(xhr, dom, arrayUtil) {
-                        
-                        // Using xhr.get, as very little information is being sent
-                        xhr.get({
-                                url: "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + gpsCoord + "&sensor=true",
-                                handleAs: "json",
-                                // The success callback with result from server
-                                load: function(jsonData) {
-                                    var addressDataView = document.getElementById('addressDataView');
-                                    addressDataView.value = jsonData.results[0].formatted_address.replace(/, /g, "\n");                                    
-                                    issueModel.LocationAddress.set('value', jsonData.results[0].formatted_address);
-                                    issueModel.Location.set('value', gpsCoord);
-                                },
-                                error: function() {
-                                    addressDataView.value = 'Adresu se nepodařilo získat'
-                                }
-                                });
-                        
-                        });
-                
+            function onDeviceReady() {
             }
             
             // Load the widget parser and mobile base
@@ -110,127 +72,21 @@
                      ], 
                     function(parser, deviceTheme) {
                     
-                        issueModel = dojox.mvc.newStatefulModel({ data : {
-                                                                "Title" : "", 
-                                                                "PhotoSelected" : "false",
-                                                                "PhotoURI" : "",
-                                                                "Location" : "",
-                                                                "LocationAddress" : "",
-                                                                "Description" : ""
-                                                                }});
-                        
-                        
-                        // Parse the page for widgets!
-                        parser.parse();
+                    urboItem = dojox.mvc.newStatefulModel({ data : {
+                                                            "Title" : "", 
+                                                            "PhotoSelected" : "false",
+                                                            "PhotoURI" : "",
+                                                            "Location" : "",
+                                                            "LocationAddress" : "",
+                                                            "Description" : ""
+                                                            }});
                     
-}
+                    
+                    // Parse the page for widgets!
+                    parser.parse();
+                    
+                    }
                     );
-            
-            // Photo capture functions
-            // Called when a photo is successfully retrieved
-            //
-            function onPhotoURISuccess(photoURI) {
-                //                        if((null != imageURI) && ('null' != imageURI) && (imageURI.indexOf('file:') != -1)) {
-                issueModel.PhotoSelected = true;
-                issueModel.PhotoURI = photoURI;
-                
-                var photoDataView = document.getElementById('photoDataView');
-                photoDataView.style.backgroundImage="url('" + photoURI + "')"
-                photoDataView.innerHTML = ""
-                //                        }
-                switchView('getSomePhotoView', 'dataView')
-            }
-            
-            function switchView(fromView, toView) {
-                var w = dijit.byId(fromView);
-                w.performTransition(toView,-1,"fade",null);                        
-            }
-            
-            function onFail(message) {
-                switchView('getSomePhotoView', 'dataView')
-            }
-            
-            function getPhoto(photoSourceType) {
-                navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
-                                            destinationType: Camera.DestinationType.FILE_URI,
-                                            sourceType: photoSourceType 
-                                            });
-            }
-            
-            function setNewGuardReport() {
-                var photoDataView = document.getElementById('photoDataView')
-                photoDataView.style.backgroundImage="";
-                photoDataView.innerHTML = "Vybrat foto";
-
-                clearField('titleDataView');
-                clearField('mapDataView');
-                clearField('addressDataView');
-                clearField('descriptionDataView');
-
-                getGpsCoordinates();
-            }
-            
-            function clearField(id) {
-                var element = document.getElementById(id);
-                element.value = '';
-            }
-            
-            function onGpsCoordsSuccess(position) {
-                var gpsCoords = position.coords.latitude + "," + position.coords.longitude;
-                
-                console.log("Retrieved GPS coordinates " + gpsCoords);
-                
-                issueModel.Location.set('value', gpsCoords);
-                
-                retrieveMapForLocation(gpsCoords);
-                retrieveAddressForLocation(gpsCoords);
-            }
-            
-            // onError Callback receives a PositionError object
-            //
-            function onGpsCoordsError(error) {
-                // Needed to get the GPS coords manually by selecting in a map
-                alert('code: '    + error.code    + '\n' +
-                      'message: ' + error.message + '\n');
-            }
-            
-            function getGpsCoordinates() {
-                navigator.geolocation.getCurrentPosition(onGpsCoordsSuccess, onGpsCoordsError);
-            }
-            
-            function getSomePhoto() {
-                var w = dijit.byId('dataView');
-                w.performTransition('#getSomePhotoView',1,"fade",null);                        
-            }
-            
-            function guardInfoUpload() {
-                console.log("Uploading photo 1" + issueModel.PhotoURI);
-                var options = new FileUploadOptions();
-                options.fileKey = "file";
-                options.fileName = issueModel.PhotoURI.substr(issueModel.PhotoURI.lastIndexOf('/')+1);
-                options.mimeType = "image/jpeg";
-                
-                var params = new Object();
-                params.value1 = "test";
-                params.value2 = "param";
-                
-                options.params = params;
-                
-                var ft = new FileTransfer();
-                ft.upload(issueModel.PhotoURI, "http://localhost:9000", guardInfoUploadSuccess, guardInfoUploadError, options);
-                
-                console.log("Uploading photo 3" + issueModel.PhotoURI);
-            }
-            
-            function guardInfoUploadSuccess(r) {
-                console.log("Code = " + r.responseCode);
-                console.log("Response = " + r.response);
-                console.log("Sent = " + r.bytesSent);
-            }
-            
-            function guardInfoUploadError(error) {
-                alert("An error has occurred: Code = " + error.code);
-            }
             
             String.prototype.trunc = function(n,useWordBoundary){
                 var toLong = this.length>n,
@@ -247,12 +103,6 @@
                 <div data-dojo-type="dojox.mobile.ToolBarButton" label="Další" moveTo="recapitulationView" style="float:right;"></div>
             </h1>
             
-            <div id="geolocation"></div>
-            
-            <!--
-             <button onclick="getPhoto(Camera.PictureSourceType.CAMERA);">Přiložte foto</button>
-             -->
-            
             <div data-dojo-type="dojox.mobile.RoundRectList">
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
                     <div style="display: inline; text-align:center;">
@@ -260,24 +110,18 @@
                             <button id="photoDataView" data-dojo-type="dojox.mobile.Button" data-dojo-props='label:"Vybrat foto"' baseClass="btnPhoto" onClick="getSomePhoto();" />
                         </div>
                         <div style="display: inline;">
-                            <input id="titleDataView" data-dojo-type="dojox.mobile.TextBox" placeHolder="Titulek" data-dojo-props="ref: issueModel.Title" maxlength="40"  />
+                            <input id="titleDataView" data-dojo-type="dojox.mobile.TextBox" placeHolder="Titulek" data-dojo-props="ref: urboItem.Title" maxlength="40" />
                         </div>
                     </div>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
                     <span style="display: inline; text-align: center; white-space: nowrap;">
                         <img id="mapDataView" src="" style="height: 80px; width: 80px;"/>
-                        <textarea id="addressDataView" readonly="readonly" data-dojo-type="dojox.mobile.TextArea" cols="25" rows="5">
-                            Kde:
-                            
-                            U Tří lip 23
-                            Postoloprty
-                            121 00
-                        </textarea>
+                        <textarea id="addressDataView" readonly="readonly" data-dojo-type="dojox.mobile.TextArea" cols="25" rows="5"></textarea>
                     </span>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
-                    <textarea id="descriptionDataView" data-dojo-type="dojox.mobile.TextArea" style="width:95%;" cols="30" rows="5" maxLenght="300" placeHolder="Popis" data-dojo-props="ref: issueModel.Description"></textarea>
+                    <textarea id="descriptionDataView" data-dojo-type="dojox.mobile.TextArea" style="width:95%;" cols="30" rows="5" maxLenght="300" placeHolder="Popis" data-dojo-props="ref: urboItem.Description"></textarea>
                 </li>
             </div>
         </div>
@@ -300,16 +144,16 @@
                     Pro: <button data-dojo-type="dojox.mobile.Button">MěÚ Chomutov</button>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem">
-                    Věc: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: issueModel.Title">${this.value}</span>
+                    Věc: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: urboItem.Title">${this.value}</span>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
-                    <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: issueModel.Description">${this.value.trunc(300, true)}</span>
+                    <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: urboItem.Description">${this.value.trunc(300, true)}</span>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
-                    Kde: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: issueModel.LocationAddress">${this.value}</span>
+                    Kde: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: urboItem.LocationAddress">${this.value}</span>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
-                    Fotka přiložena: <input data-dojo-type="dojox.mobile.CheckBox" type="checkbox" readonly="readonly" data-dojo-props='checked:(issueModel.PhotoURI != "")' style="float:right;" />
+                    Fotka přiložena: <input data-dojo-type="dojox.mobile.CheckBox" type="checkbox" readonly="readonly" data-dojo-props='checked:(urboItem.PhotoURI != "")' style="float:right;" />
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem">
                     S úctou <button data-dojo-type="dojox.mobile.Button">František Koudelka</button>
