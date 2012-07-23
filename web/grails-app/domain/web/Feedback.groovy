@@ -10,17 +10,17 @@ import cz.superobcan.web.FeedbackState
 class Feedback {
 
     static constraints = {
-
         photo nullable: true
         description nullable: true
         authorityResponse nullable: true
     }
 
-    static embedded = ['photo','location', 'authorityResponse']
+    static embedded = ['photo', 'location', 'authorityResponse']
+
+    String title
 
     Photo photo
 
-    String title
     String description
 
     Location location
