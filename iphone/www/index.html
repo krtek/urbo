@@ -12,7 +12,7 @@
         
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <title>Dobrý občan</title>
-        <link href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojox/mobile/themes/iphone/iphone.css" rel="stylesheet"></link>
+        <link media="only screen and (max-device-width: 480px)" href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojox/mobile/themes/iphone/iphone.css" rel="stylesheet"></link>
         <link href="css/custom.css" rel="stylesheet"></link>
         <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js"
             data-dojo-config="async:true"></script>
@@ -217,23 +217,19 @@
                     </div>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
-                    <div style="display: inline; text-align:center;">
-                        <div style="display: inline;">
-                            <img id="mapDataView" src="" style="height:100px;width:100px;"/>
-                        </div>
-                        <div style="display: inline;">
-                            <textarea id="addressDataView" readonly="readonly" data-dojo-type="dojox.mobile.TextArea" cols="30" rows="5">
+                    <span style="display: inline; text-align: center; white-space: nowrap;">
+                        <img id="mapDataView" src="" style="height: 80px; width: 80px;"/>
+                        <textarea id="addressDataView" readonly="readonly" data-dojo-type="dojox.mobile.TextArea" cols="30" rows="5">
 Kde:
 
 U Tří lip 23
 Postoloprty
 121 00
-                            </textarea>
-                        </div>
-                    </div>
+                        </textarea>
+                    </span>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
-                    <textarea data-dojo-type="dojox.mobile.TextArea" cols="30" rows="5" maxLenght="300" placeHolder="Popis" data-dojo-props="ref: issueModel.Description"></textarea>
+                    <textarea data-dojo-type="dojox.mobile.TextArea" style="width:95%;" cols="30" rows="5" maxLenght="300" placeHolder="Popis" data-dojo-props="ref: issueModel.Description"></textarea>
                 </li>
             </div>
         </div>
