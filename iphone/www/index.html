@@ -1,161 +1,200 @@
 <!DOCTYPE html>
 <html>
-    <!--
-     #
-     # Licensed to the Apache Software Foundation (ASF) under one
-     # or more contributor license agreements.  See the NOTICE file
-     # distributed with this work for additional information
-     # regarding copyright ownership.  The ASF licenses this file
-     # to you under the Apache License, Version 2.0 (the
-     # "License"); you may not use this file except in compliance
-     # with the License.  You may obtain a copy of the License at
-     # 
-     # http://www.apache.org/licenses/LICENSE-2.0
-     # 
-     # Unless required by applicable law or agreed to in writing,
-     # software distributed under the License is distributed on an
-     # "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     #  KIND, either express or implied.  See the License for the
-     # specific language governing permissions and limitations
-     # under the License.
-     #
-     -->
     <head>
         <title></title>
-        
+        <meta charset="utf-8"/>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
-        <meta charset="utf-8">
-            <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        
+        <!-- !!!REMOVE THIS WHEN GOING LIVE!!!, prevent cache -->
+        <meta http-equiv="cache-control" content="no-cache" />
+        <meta http-equiv="pragma" content="no-cache" />
+        
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <title>Dobrý občan</title>
+        <link href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojox/mobile/themes/iphone/iphone.css" rel="stylesheet"></link>
+        <link href="css/custom.css" rel="stylesheet"></link>
+        <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js"
+            data-dojo-config="async:true"></script>
+        
+        <script type="text/javascript" charset="utf-8" src="cordova-1.9.0.js"></script>        
+        
+        
+        <!-- iPad/iPhone specific css below, add after your main css >
+         <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />		
+         <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />		
+         -->
+        <!-- If your application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
+        <script type="text/javascript">
+            
+            
+            // If you want to prevent dragging, uncomment this section
+            /*
+             function preventBehavior(e) 
+             { 
+             e.preventDefault(); 
+             };
+             document.addEventListener("touchmove", preventBehavior, false);
+             */
+            
+            /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+             see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+             for more details -jm */
+            /*
+             function handleOpenURL(url)
+             {
+             // TODO: do something with the url passed in.
+             }
+             */
+            
+            function onBodyLoad()
+            {		
+                document.addEventListener("deviceready", onDeviceReady, false);
+            }
+            
+            /* When this function is called, Cordova has been initialized and is ready to roll */
+            /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+             see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+             for more details -jm */
+            function onDeviceReady()
+            {
+            }
+            
+            function retrieveMapForLocation(gpsCoord) {
+                var url = 'http://maps.google.com/maps/api/staticmap?center=' + gpsCoord + '&zoom=16&size=100x100&maptype=roadmap&markers=color:blue%7C' + gpsCoord + '&sensor=true'
+                mapDataView = document.getElementById("mapDataView");
+                mapDataView.setAttribute('src', url)
+            }
+            
+            function retrieveAddressForLocation(gpsCoord) {
                 
-                <!-- !!!REMOVE THIS WHEN GOING LIVE!!!, prevent cache -->
-                <meta http-equiv="cache-control" content="no-cache" />
-                <meta http-equiv="pragma" content="no-cache" />
-                
-                <meta name="apple-mobile-web-app-capable" content="yes" />
-                <title>Dobrý občan</title>
-                <link href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojox/mobile/themes/iphone/iphone.css" rel="stylesheet"></link>
-                <link href="css/custom.css" rel="stylesheet"></link>
-                <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js"
-                    data-dojo-config="async:true"></script>
-                
-                <script type="text/javascript" charset="utf-8" src="cordova-1.9.0.js"></script>        
-                
-                
-                <!-- iPad/iPhone specific css below, add after your main css >
-                 <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />		
-                 <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />		
-                 -->
-                <!-- If your application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
-                <script type="text/javascript">
-                    
-                    
-                    // If you want to prevent dragging, uncomment this section
-                    /*
-                     function preventBehavior(e) 
-                     { 
-                     e.preventDefault(); 
-                     };
-                     document.addEventListener("touchmove", preventBehavior, false);
-                     */
-                    
-                    /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
-                     see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
-                     for more details -jm */
-                    /*
-                     function handleOpenURL(url)
-                     {
-                     // TODO: do something with the url passed in.
-                     }
-                     */
-                    
-                    function onBodyLoad()
-                    {		
-                        document.addEventListener("deviceready", onDeviceReady, false);
-                    }
-                    
-                    /* When this function is called, Cordova has been initialized and is ready to roll */
-                    /* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
-                     see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
-                     for more details -jm */
-                    function onDeviceReady()
-                    {
-                    }
-                    
-                    // Load the widget parser and mobile base
-                    require(["dojox/mobile/parser", 
-                             "dojox/mobile/deviceTheme", 
-                             "dojox/mobile/compat", 
-                             "dojox/mobile",
-                             "dojox/mobile/ScrollableView",
-                             "dojox/mobile/Button",
-                             "dojox/mobile/CheckBox",
-                             "dojox/mobile/IconItem",                             
-                             "dojox/mobile/TextBox",
-                             "dojox/mobile/TextArea",
-                             "dojox/mobile/ExpandingTextArea",
-                             "dojox/mvc",
-                             "dojox/mvc/Group",
-                             "dojox/mvc/Output"
-                             ], 
-                            function(parser, deviceTheme) {
-                            
-                            issueModel = dojox.mvc.newStatefulModel({ data : {
-                                                                    "Title" : "", 
-                                                                    "PhotoURI" : "", 
-                                                                    "Location" : "",
-                                                                    "Description" : ""
-                                                                    }});
-
-                            
-                            // Parse the page for widgets!
-                            parser.parse();
-                            
-                            }
-                            );
-                    
-                    // Photo capture functions
-                    // Called when a photo is successfully retrieved
-                    //
-                    function onPhotoURISuccess(photoURI) {
-                        //                        if((null != imageURI) && ('null' != imageURI) && (imageURI.indexOf('file:') != -1)) {
-                        issueModel.PhotoURI = photoURI;
+                require(["dojo/_base/xhr", "dojo/dom", "dojo/_base/array", "dojo/domReady!"],
+                        function(xhr, dom, arrayUtil) {
                         
-                        var photoDataView = document.getElementById('photoDataView');
-                        photoDataView.style.backgroundImage="url('" + photoURI + "')"
-                        photoDataView.innerHTML = ""
-                        //                        }
-                        switchView('getSomePhotoView', 'dataView')
-                    }
+                        // Using xhr.get, as very little information is being sent
+                        xhr.get({
+                                url: "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + gpsCoord + "&sensor=true",
+                                handleAs: "json",
+                                // The success callback with result from server
+                                load: function(jsonData) {
+                                    var addressDataView = document.getElementById('addressDataView');
+                                    addressDataView.value = jsonData.results[0].formatted_address;
+                                },
+                                error: function() {
+                                    addressDataView.value = 'Adresu se nepodařilo získat'
+                                }
+                                });
+                        
+                        });
+            }
+            
+            // Load the widget parser and mobile base
+            require([
+                     "dojox/mobile/parser", 
+                     "dojox/mobile/deviceTheme", 
+                     "dojox/mobile/compat", 
+                     "dojox/mobile",
+                     "dojox/mobile/ScrollableView",
+                     "dojox/mobile/Button",
+                     "dojox/mobile/CheckBox",
+                     "dojox/mobile/IconItem",                             
+                     "dojox/mobile/TextBox",
+                     "dojox/mobile/TextArea",
+                     "dojox/mobile/ExpandingTextArea",
+                     "dojox/mvc",
+                     "dojox/mvc/Group",
+                     "dojox/mvc/Output"
+                     ], 
+                    function(parser, deviceTheme) {
                     
-                    function switchView(fromView, toView) {
-                        var w = dijit.byId(fromView);
-                        w.performTransition(toView,-1,"fade",null);                        
-                    }
+                    issueModel = dojox.mvc.newStatefulModel({ data : {
+                                                            "Title" : "", 
+                                                            "PhotoURI" : "", 
+                                                            "Location" : "",
+                                                            "Description" : ""
+                                                            }});
                     
-                    function onFail(message) {
-                        switchView('getSomePhotoView', 'dataView')
-                    }
                     
-                    function getPhoto(photoSourceType) {
-                        navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
-                                                    destinationType: Camera.DestinationType.FILE_URI,
-                                                    sourceType: photoSourceType 
-                                                    });
-                    }
+                    // Parse the page for widgets!
+                    parser.parse();
                     
-                    function getSomePhoto() {
-                        var w = dijit.byId('dataView');
-                        w.performTransition('#getSomePhotoView',1,"fade",null);                        
                     }
-
-                    String.prototype.trunc = function(n,useWordBoundary){
-                        var toLong = this.length>n,
-                        s_ = toLong ? this.substr(0,n-1) : this;
-                        s_ = useWordBoundary && toLong ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
-                        return  toLong ? s_ + '&hellip;' : s_;
-                    };
-                    </script>
-                </head>
+                    );
+            
+            // Photo capture functions
+            // Called when a photo is successfully retrieved
+            //
+            function onPhotoURISuccess(photoURI) {
+                //                        if((null != imageURI) && ('null' != imageURI) && (imageURI.indexOf('file:') != -1)) {
+                issueModel.PhotoURI = photoURI;
+                
+                var photoDataView = document.getElementById('photoDataView');
+                photoDataView.style.backgroundImage="url('" + photoURI + "')"
+                photoDataView.innerHTML = ""
+                //                        }
+                switchView('getSomePhotoView', 'dataView')
+            }
+            
+            function switchView(fromView, toView) {
+                var w = dijit.byId(fromView);
+                w.performTransition(toView,-1,"fade",null);                        
+            }
+            
+            function onFail(message) {
+                switchView('getSomePhotoView', 'dataView')
+            }
+            
+            function getPhoto(photoSourceType) {
+                navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
+                                            destinationType: Camera.DestinationType.FILE_URI,
+                                            sourceType: photoSourceType 
+                                            });
+            }
+            
+            function getSomePhoto() {
+                retrieveMapForLocation('40.714224,-73.961452')
+                retrieveAddressForLocation('40.714224,-73.961452')
+                var w = dijit.byId('dataView');
+                w.performTransition('#getSomePhotoView',1,"fade",null);                        
+            }
+            
+            function guardInfoUpload() {
+                console.log("Uploading photo 1" + issueModel.PhotoURI);
+                var options = new FileUploadOptions();
+                options.fileKey = "file";
+                options.fileName = issueModel.PhotoURI.substr(issueModel.PhotoURI.lastIndexOf('/')+1);
+                options.mimeType = "image/jpeg";
+                
+                var params = new Object();
+                params.value1 = "test";
+                params.value2 = "param";
+                
+                options.params = params;
+                
+                var ft = new FileTransfer();
+                ft.upload(issueModel.PhotoURI, "http://localhost:9000", guardInfoUploadSuccess, guardInfoUploadError, options);
+                
+                console.log("Uploading photo 3" + issueModel.PhotoURI);
+            }
+            
+            function guardInfoUploadSuccess(r) {
+                console.log("Code = " + r.responseCode);
+                console.log("Response = " + r.response);
+                console.log("Sent = " + r.bytesSent);
+            }
+            
+            function guardInfoUploadError(error) {
+                alert("An error has occurred: Code = " + error.code);
+            }
+            
+            String.prototype.trunc = function(n,useWordBoundary){
+                var toLong = this.length>n,
+                s_ = toLong ? this.substr(0,n-1) : this;
+                s_ = useWordBoundary && toLong ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
+                return  toLong ? s_ + '&hellip;' : s_;
+            };
+            </script>
+    </head>
     <body onload="onBodyLoad()">
         <div id="dataView" data-dojo-type="dojox.mobile.ScrollableView">
             <h1 data-dojo-type="dojox.mobile.Heading" label="Dobrý občan - Zadání">
@@ -177,18 +216,24 @@
                         </div>
                     </div>
                 </li>
-
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
-                    <textarea readonly="readonly" data-dojo-type="dojox.mobile.TextArea" cols="30" rows="5">
-                        Kde:
-                        
-                        U Tří lip 23
-                        Postoloprty
-                        121 00
-                    </textarea>
+                    <div style="display: inline; text-align:center;">
+                        <div style="display: inline;">
+                            <img id="mapDataView" src="" style="height:100px;width:100px;"/>
+                        </div>
+                        <div style="display: inline;">
+                            <textarea id="addressDataView" readonly="readonly" data-dojo-type="dojox.mobile.TextArea" cols="30" rows="5">
+Kde:
+
+U Tří lip 23
+Postoloprty
+121 00
+                            </textarea>
+                        </div>
+                    </div>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
-                    <textarea data-dojo-type="dojox.mobile.TextArea" cols="30" rows="5" maxLenght="1000" placeHolder="Popis" data-dojo-props="ref: issueModel.Description"></textarea>
+                    <textarea data-dojo-type="dojox.mobile.TextArea" cols="30" rows="5" maxLenght="300" placeHolder="Popis" data-dojo-props="ref: issueModel.Description"></textarea>
                 </li>
             </div>
         </div>
@@ -203,31 +248,29 @@
         
         <div id="recapitulationView" data-dojo-type="dojox.mobile.View">
             <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="dataView">Rekapitulace                
-                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;"></div>
+                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="guardInfoUpload()"></div>
             </h1>   
-            <div data-dojo-type="dojox.mobile.RoundRect">
-                <div>
+            
+            <div data-dojo-type="dojox.mobile.RoundRectList">
+                <li data-dojo-type="dojox.mobile.ListItem">
                     Pro: <button data-dojo-type="dojox.mobile.Button">MěÚ Chomutov</button>
-                </div>
-                <div>
+                </li>
+                <li data-dojo-type="dojox.mobile.ListItem">
                     Věc: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: issueModel.Title">${this.value}</span>
-                </div>
-                <hr/>
-                <div>
+                </li>
+                <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
                     <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: issueModel.Description">${this.value.trunc(300, true)}</span>
-                </div>
-                <hr/>
-                <div>
+                </li>
+                <li data-dojo-type="dojox.mobile.ListItem">
                     Kde: <button data-dojo-type="dojox.mobile.Button">Luční 4</button>
-                </div>
-                <div>
-                    Fotka přiložena: <div data-dojo-type="dojox.mobile.Switch" value="on" leftLabel="Ano" rightLabel="Ne" style="float:right;"></div>
-                </div>
-                <hr/>
-                <div>
+                </li>
+                <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
+                    Fotka přiložena: <input data-dojo-type="dojox.mobile.CheckBox" type="checkbox" readonly="readonly" data-dojo-props='checked:(issueModel.PhotoURI != "")' style="float:right;" />
+                </li>
+                <li data-dojo-type="dojox.mobile.ListItem">
                     S úctou <button data-dojo-type="dojox.mobile.Button">František Koudelka</button>
-                </div>
-            </div>             
+                </li>
+            </div>
         </div>
     </body>
 </html>
