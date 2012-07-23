@@ -16,12 +16,12 @@ function retrieveAddressForLocation(gpsCoord) {
                     // The success callback with result from server
                     load: function(jsonData) {
                     var addressDataView = document.getElementById('addressDataView');
-                    addressDataView.value = jsonData.results[0].formatted_address.replace(/, /g, "\n");                                    
+                    addressDataView.innerHTML = jsonData.results[0].formatted_address.replace(/, /g, "\n");                                    
                     urboItem.LocationAddress.set('value', jsonData.results[0].formatted_address);
                     urboItem.Location.set('value', gpsCoord);
                     },
                     error: function() {
-                    addressDataView.value = 'Adresu se nepodařilo získat'
+                        addressNotFound();
                     }
                     });
             
@@ -33,14 +33,15 @@ function retrieveAddressForLocation(gpsCoord) {
 // Called when a photo is successfully retrieved
 //
 function onPhotoURISuccess(photoURI) {
-    //                        if((null != imageURI) && ('null' != imageURI) && (imageURI.indexOf('file:') != -1)) {
     urboItem.PhotoSelected = true;
     urboItem.PhotoURI = photoURI;
     
     var photoDataView = document.getElementById('photoDataView');
     photoDataView.style.backgroundImage="url('" + photoURI + "')"
     photoDataView.innerHTML = ""
-    //                        }
+    
+    getGpsCoordinates();
+
     switchView('getSomePhotoView', 'dataView')
 }
 
@@ -65,12 +66,19 @@ function setNewGuardReport() {
     photoDataView.style.backgroundImage="";
     photoDataView.innerHTML = "Vybrat foto";
     
+    addressNotFound();
+    
     clearField('titleDataView');
     clearField('mapDataView');
-    clearField('addressDataView');
+    mapDataView.src = 'imgs/noMap.jpg'
+    
     clearField('descriptionDataView');
     
     getGpsCoordinates();
+}
+
+function addressNotFound() {
+    addressDataView.innerHTML = 'Adresu se nepodařilo získat! Vyberte ji prosím ručně kliknutím na toto pole nebo obrázek.';
 }
 
 function clearField(id) {
@@ -92,13 +100,36 @@ function onGpsCoordsSuccess(position) {
 // onError Callback receives a PositionError object
 //
 function onGpsCoordsError(error) {
-    // Needed to get the GPS coords manually by selecting in a map
-    alert('code: '    + error.code    + '\n' +
-          'message: ' + error.message + '\n');
+    // Need to get the GPS coords manually by selecting in a map
+    urboItem.Location.set('value', '');
+    urboItem.LocationAddress.set('value', '');
+    mapDataView.setAttribute('src', '');
+    addressNotFound();
 }
 
 function getGpsCoordinates() {
     navigator.geolocation.getCurrentPosition(onGpsCoordsSuccess, onGpsCoordsError);
+}
+
+function adjustGpsCoords() {
+    switchView('dataView','getLocationManuallyView');
+}
+
+function searchGpsCoordsManually() {
+    var addressField = document.getElementById('placeNameForMap');
+    console.log(addressField.value);
+    var geocoder = new google.maps.Geocoder();
+    geocoder.geocode({'address': addressField.value}, 
+                     function(results, status) { 
+                     if (status == google.maps.GeocoderStatus.OK) { 
+                         var loc = results[0].geometry.location;
+                         console.log(loc);
+                         document.getElementById('googleMapResult').innerHTML = loc.lat() + "," + loc.lng();
+                     } 
+                     else {
+                        document.getElementById('googleMapResult').innerHTML = 'Not found: ' + status;
+                     } 
+                     });
 }
 
 function getSomePhoto() {
