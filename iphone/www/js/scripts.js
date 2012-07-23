@@ -106,7 +106,7 @@ function getSomePhoto() {
     w.performTransition('#getSomePhotoView',1,"fade",null);                        
 }
 
-function guardInfoUpload() {
+function uploadPhoto() {
     console.log("Uploading photo 1" + urboItem.PhotoURI);
     var options = new FileUploadOptions();
     options.fileKey = "file";
@@ -124,6 +124,39 @@ function guardInfoUpload() {
     
     console.log("Uploading photo 3" + urboItem.PhotoURI);
 }
+
+function uploadData() {
+    require(["dojo/_base/xhr", "dojo/dom", "dojo/_base/array", "dojo/domReady!"],
+            function(xhr, dom, arrayUtil) {
+
+
+        var jsonObj = {
+            "feedback": {
+               "title": urboItem.Title.value,
+               "description": urboItem.Description.value,
+               "latitude": urboItem.Location.value.split(',')[0],
+               "longitude": urboItem.Location.value.split(',')[1],                       
+           }
+       }
+
+        var dataToSend = dojo.toJson(jsonObj);
+        console.log(dataToSend, typeof dataToSend);
+
+        var xhrArgs = {
+            url: "http://localhost:9000/dojo/pokus",
+            postData: dataToSend,
+            handleAs: "json",
+            load: function(data){
+                console.log('Message sent.');              
+            },
+            error: function(error){        
+                console.log('Message sent failed.');                         
+            }
+        }
+        xhr.post(xhrArgs);
+    });
+}
+
 
 function guardInfoUploadSuccess(r) {
     console.log("Code = " + r.responseCode);
