@@ -14,7 +14,8 @@
         <title>Dobrý občan</title>
         <link media="only screen and (max-device-width: 480px)" href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojox/mobile/themes/iphone/iphone.css" rel="stylesheet"></link>
         <link href="css/custom.css" rel="stylesheet"></link>
-        <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojo/dojo.js"
+        <!-- !!!REMOVE THIS WHEN GOING LIVE!!!, easier debugging -->
+        <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.3/dojo/dojo.js.uncompressed.js"
             data-dojo-config="async:true"></script>
         
         <script type="text/javascript" charset="utf-8" src="cordova-1.9.0.js"></script>        
@@ -148,7 +149,7 @@
         
         <div id="recapitulationView" data-dojo-type="dojox.mobile.View">
             <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="dataView">Rekapitulace                
-                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="guardInfoUpload()"></div>
+                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="uploadData()"></div>
             </h1>   
             
             <div data-dojo-type="dojox.mobile.RoundRectList">
