@@ -78,12 +78,12 @@
                                 // The success callback with result from server
                                 load: function(jsonData) {
                                     var addressDataView = document.getElementById('addressDataView');
-                                    addressDataView.value = jsonData.results[0].formatted_address;                                    
-                                    issueModel.LocationAddress.set('value', jsonData.results[0].formatted_address.replace(", ", "\n"));
+                                    addressDataView.value = jsonData.results[0].formatted_address.replace(/, /g, "\n");                                    
+                                    issueModel.LocationAddress.set('value', jsonData.results[0].formatted_address);
                                     issueModel.Location.set('value', gpsCoord);
                                 },
                                 error: function() {
-                                                               addressDataView.value = 'Adresu se nepodařilo získat'
+                                    addressDataView.value = 'Adresu se nepodařilo získat'
                                 }
                                 });
                         
