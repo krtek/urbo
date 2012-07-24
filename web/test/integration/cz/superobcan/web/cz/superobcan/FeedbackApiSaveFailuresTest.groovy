@@ -57,7 +57,7 @@ class FeedbackApiSaveFailuresTest extends GroovyTestCase {
 
         def expectedJson = '{"status":400,"message":"Property \'title\' cannot be \'null\'"}'
 
-        def responseContentAsString = controller.response.contentAsString
+        def responseContentAsString = controller.response.text
         assert StringUtils.deleteWhitespace(responseContentAsString) == StringUtils.deleteWhitespace(expectedJson)
 
     }
