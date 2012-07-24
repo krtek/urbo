@@ -8,3 +8,11 @@ target
 /plugins
 /web-app/plugins
 /web-app/WEB-INF/classes
+
+iphone/.DS_Store
+
+iphone/DobryObcan.xcodeproj/project.xcworkspace/xcuserdata/krtek.xcuserdatad/UserInterfaceState.xcuserstate
+
+iphone/DobryObcan.xcodeproj/xcuserdata/krtek.xcuserdatad/xcschemes/DobryObcan.xcscheme
+
+iphone/DobryObcan.xcodeproj/xcuserdata/krtek.xcuserdatad/xcschemes/xcschememanagement.plist
