@@ -1,7 +1,7 @@
 
 
 function retrieveMapForLocation(latitude, longitude) {
-    var url = 'http://maps.google.com/maps/api/staticmap?center=' + latitude + ',' + longitude + '&zoom=15&size=100x100&maptype=roadmap&markers=color:blue%7C' + latitude + ',' + longitude + '&sensor=true'
+    var url = 'http://maps.google.com/maps/api/staticmap?center=' + latitude + ',' + longitude + '&zoom=15&size=100x100&maptype=roadmap&markers=color:red%7C' + latitude + ',' + longitude + '&sensor=true'
     mapDataView = document.getElementById("mapDataView");
     mapDataView.setAttribute('src', url)
 }
@@ -43,7 +43,7 @@ function onPhotoURISuccess(photoURI) {
     
     getGpsCoordinates();
 
-    switchView('getSomePhotoView', 'dataView')
+    switchView('getSomePhotoView', 'newMessageView')
 }
 
 function switchView(fromView, toView) {
@@ -52,7 +52,7 @@ function switchView(fromView, toView) {
 }
 
 function onFail(message) {
-    switchView('getSomePhotoView', 'dataView')
+    switchView('getSomePhotoView', 'newMessageView')
 }
 
 function getPhoto(photoSourceType) {
@@ -118,9 +118,9 @@ function getGpsCoordinates() {
 
 function adjustGpsCoords() {
     if(urboItem.LocationLatitude != '') {
-        showMapToAdjust('dataView', urboItem.LocationLatitude, urboItem.LocationLongitude);
+        showMapToAdjust('newMessageView', urboItem.LocationLatitude, urboItem.LocationLongitude);
     } else {
-        switchView('dataView','provideAddressManuallyView');
+        switchView('newMessageView','provideAddressManuallyView');
     }
 }
 
@@ -186,11 +186,11 @@ function locationManuallySelected() {
         console.log(marker.position.lng());
         refreshLocation(marker.position.lat(), marker.position.lng());
     }
-    switchView('getLocationManuallyView','dataView');
+    switchView('getLocationManuallyView','newMessageView');
 }
 
 function getSomePhoto() {
-    var w = dijit.byId('dataView');
+    var w = dijit.byId('newMessageView');
     w.performTransition('#getSomePhotoView',1,"fade",null);                        
 }
 

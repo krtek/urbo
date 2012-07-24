@@ -101,9 +101,26 @@
             </script>
     </head>
     <body onload="onBodyLoad()">
-        <div id="dataView" data-dojo-type="dojox.mobile.ScrollableView">
-            <h1 data-dojo-type="dojox.mobile.Heading" label="Hlášení">
-                <div data-dojo-type="dojox.mobile.ToolBarButton" style="padding: 0px 14px" onClick="setNewGuardReport();">Nový</div>
+        
+        
+        <div id="menuView" data-dojo-type="dojox.mobile.View">
+            <div data-dojo-type="dojox.mobile.RoundRectList">
+                <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props="variableHeight:true">
+                    <center>
+                        <div>URBO 0.1 beta private</div><br/>
+                        <img src="imgs/urbo.png" width="200" height="240" />
+                    </center>
+                </li>
+
+                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="switchView('menuView', 'newMessageView');" data-dojo-props='variableHeight:true'>Nová urbo zpráva</li>
+                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="switchView('menuView', 'myMessagesView');" data-dojo-props='variableHeight:true'>Moje urbo zprávy</li>
+                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="switchView('menuView', 'aboutAppView');" data-dojo-props='variableHeight:true'>O aplikaci...</li>
+            </div>
+        </div>
+        
+        <div id="newMessageView" data-dojo-type="dojox.mobile.View">
+            <h1 data-dojo-type="dojox.mobile.Heading" label="Zpráva">
+                <div data-dojo-type="dojox.mobile.ToolBarButton" style="padding: 0px 14px" onClick="setNewGuardReport();">Nová</div>
                 <div data-dojo-type="dojox.mobile.ToolBarButton" label="Další" moveTo="recapitulationView" style="float:right;"></div>
             </h1>
             
@@ -131,7 +148,7 @@
         </div>
         
         <div id="getSomePhotoView" data-dojo-type="dojox.mobile.View">
-            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="dataView">Přidání fotky</h1>
+            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="newMessageView">Přidání fotky</h1>
             <ul data-dojo-type="dojox.mobile.RoundRectList">
                 <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="getPhoto(Camera.PictureSourceType.CAMERA)" data-dojo-props='variableHeight:true'>Kamera</li>
                 <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="getPhoto(Camera.PictureSourceType.PHOTOLIBRARY)">Galerie fotek</li>
@@ -139,7 +156,7 @@
         </div>
         
         <div id="provideAddressManuallyView" data-dojo-type="dojox.mobile.View">
-            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="dataView">Vyhledání místa</h1>
+            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="newMessageView">Vyhledání místa</h1>
             <ul data-dojo-type="dojox.mobile.RoundRectList">
                 <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="searchGpsCoordsManually()">
                     <input id="placeNameForMap" data-dojo-type="dojox.mobile.TextBox" placeHolder="Ulice, město" data-dojo-props="ref: urboItem.Title" maxlength="40" />
@@ -149,7 +166,7 @@
         </div>
         
         <div id="getLocationManuallyView" data-dojo-type="dojox.mobile.View">
-            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="dataView">Mapa
+            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="newMessageView">Mapa
                 <div data-dojo-type="dojox.mobile.ToolBarButton" label="OK" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="locationManuallySelected();"></div>
             </h1>
             <ul data-dojo-type="dojox.mobile.RoundRectList">
@@ -158,7 +175,7 @@
         </div>
         
         <div id="recapitulationView" data-dojo-type="dojox.mobile.View">
-            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="dataView">Rekapitulace                
+            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="newMessageView">Rekapitulace                
                 <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="uploadData()"></div>
             </h1>   
             
