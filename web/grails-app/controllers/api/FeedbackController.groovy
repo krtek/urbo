@@ -1,11 +1,15 @@
 package api
 
+import cz.urbo.web.api.utils.org.apache.commons.httpclient.HttpStatus
 import groovy.json.JsonBuilder
 import web.Author
 import web.Email
 import web.Feedback
 import web.Location
 
+/**
+ * This is WEB API of URBO Application
+ */
 class FeedbackController {
 
     static allowedMethods = [save: 'POST']
@@ -22,6 +26,9 @@ class FeedbackController {
         render(contentType: "application/json", text: feedbacksAsJson)
     }
 
+    /**
+     * This action is used to save feedback through JSON post request.
+     */
     def save() {
 
         def feedbackParams = request.JSON.feedback // when parseRequest in urlmapping is true then params.feedback is ok
@@ -36,11 +43,43 @@ class FeedbackController {
                                                 surname: "TheGreat",
                                                 email: new Email(address: "urbo@urbo.eu")))
 
-        feedback.save()
+        if(!feedback.save(failOnError: false, flush: true)) {
 
-        //TODO: mbernhard - reakce na chybove stavy
+            def allErrorsAsText =
+                           feedback.errors.allErrors.collect {
+                                "Property '${it.field}' cannot be '${it.rejectedValue}'"
+                           }.join("\n")
 
-        render '{ "info": "succesfully saved" }'
+            def json = new JsonBuilder(
+                                "status": HttpStatus.SC_BAD_REQUEST, /* 400 - Bad Request -
+                                                  this should be the same as http response code we use,
+                                                  because developer  can work directly with json response
+                                                  and don't have to use http status codes to detect errors..
+                                                  or he can */
+                                "message": allErrorsAsText)
+
+            render (
+                  contentType: "application/json",
+                  text: json.toPrettyString(),
+                  status: HttpStatus.SC_BAD_REQUEST, /* HttpCode for Bad Request */
+                  encoding: "utf-8")
+
+        }
+        else {
+            def json = new JsonBuilder(
+                                status: HttpStatus.SC_OK,
+                                message: "Feedback has been successfully saved - id of saved feedback is accessible " +
+                                         "in 'feedback_id' property of this response.",
+                                feedback_id: feedback.id)
+
+            render (
+                    status: HttpStatus.SC_OK,
+                    contentType: "application/json",
+                    text: json.toPrettyString(),
+                    encoding: "utf-8"
+            )
+        }
+
 
     }
 
@@ -58,16 +97,6 @@ class FeedbackController {
             render(contentType: "application/json", text: feedbacksAsJson)
         }
 
-
-
     }
-
-    def handleError() {
-
-        render "shit happened, try it later mate"
-
-    }
-
-
 
 }
