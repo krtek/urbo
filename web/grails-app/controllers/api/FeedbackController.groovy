@@ -32,17 +32,19 @@ class FeedbackController {
     def save() {
 
         def feedbackParams = request.JSON.feedback // when parseRequest in urlmapping is true then params.feedback is ok
+        def author = new Author(
+                name: "Urbo",
+                surname: "TheGreat",
+                email: new Email(address: "urbo@urbo.eu"))
+
+        author.save()
 
         def feedback = new Feedback(
                                 title: feedbackParams.title,
                                 description: feedbackParams.description,
                                 location:  new Location(latitude: feedbackParams.latitude,
                                                         longitude: feedbackParams.longitude),
-                                author: new Author(
-                                                name: "Urbo",
-                                                surname: "TheGreat",
-                                                email: new Email(address: "urbo@urbo.eu")))
-
+                                author: author)
         if(!feedback.save(failOnError: false, flush: true)) {
 
             def allErrorsAsText =

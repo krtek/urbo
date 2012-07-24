@@ -2,10 +2,10 @@ package web
 
 class Photo {
 
+    static belongsTo = [feedback: Feedback]
+
     static constraints = {
     }
-
-    static belongsTo = [feedback: Feedback]
 
     byte[] data
 }
