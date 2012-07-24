@@ -1,9 +1,14 @@
 package api
 
 import groovy.json.JsonBuilder
+import web.Author
+import web.Email
 import web.Feedback
+import web.Location
 
 class FeedbackController {
+
+    static allowedMethods = [save: 'POST']
 
     def feedbackService
 
@@ -18,7 +23,25 @@ class FeedbackController {
     }
 
     def save() {
-        render "saving is not implemented yet my lord"
+
+        def feedbackParams = request.JSON.feedback // when parseRequest in urlmapping is true then params.feedback is ok
+
+        def feedback = new Feedback(
+                                title: feedbackParams.title,
+                                description: feedbackParams.description,
+                                location:  new Location(latitude: feedbackParams.latitude,
+                                                        longitude: feedbackParams.longitude),
+                                author: new Author(
+                                                name: "Urbo",
+                                                surname: "TheGreat",
+                                                email: new Email(address: "urbo@urbo.eu")))
+
+        feedback.save()
+
+        //TODO: mbernhard - reakce na chybove stavy
+
+        render '{ "info": "succesfully saved" }'
+
     }
 
     def findById() {

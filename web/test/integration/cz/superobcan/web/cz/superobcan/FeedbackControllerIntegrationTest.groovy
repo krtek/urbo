@@ -1,6 +1,7 @@
 package cz.superobcan.web.cz.superobcan
 
 import api.FeedbackController
+import org.springframework.http.HttpMethod
 import web.Feedback
 
 
@@ -11,7 +12,7 @@ class FeedbackControllerIntegrationTest extends GroovyTestCase {
         def controller = new FeedbackController()
 
         controller.request.contentType = "text/json"
-        controller.request.content = """
+        controller.request.content = '''
 
             {
                 "feedback":
@@ -24,9 +25,9 @@ class FeedbackControllerIntegrationTest extends GroovyTestCase {
                     }
             }
 
-        """.getBytes("utf-8")
+        '''.getBytes("utf-8")
 
-        controller.request.method = "POST"
+        controller.request.requestMethod = HttpMethod.POST
 
         controller.save()
 

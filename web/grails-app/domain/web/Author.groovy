@@ -2,7 +2,7 @@ package web
 
 class Author {
 
-    static hasMany = [cases : Feedback]
+    static hasMany = [feedback : Feedback]
 
     static embedded = ['email']
 
