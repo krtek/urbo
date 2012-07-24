@@ -10,7 +10,7 @@ class UrlMappings {
         "/admin/case"(controller: "feedbackCrud")
         "/admin/author"(controller:  "authorCrud")
 
-        "/api/v1/case"(controller: "feedback", parseRequest: true) {
+        "/api/v1/case"(controller: "feedback") {
             action = [GET: "findAll", POST: "save"]
         }
 

@@ -12,7 +12,7 @@
         
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <title>Dobrý občan</title>
-        <link media="only screen and (max-device-width: 480px)" href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.1/dojox/mobile/themes/iphone/iphone.css" rel="stylesheet"></link>
+        <link media="only screen and (max-device-width: 480px)" href="http://ajax.googleapis.com/ajax/libs/dojo/1.7.3/dojox/mobile/themes/iphone/iphone.css" rel="stylesheet"></link>
         <link href="css/custom.css" rel="stylesheet"></link>
         <!-- !!!REMOVE THIS WHEN GOING LIVE!!!, easier debugging -->
         <script src="http://ajax.googleapis.com/ajax/libs/dojo/1.7.3/dojo/dojo.js.uncompressed.js"
@@ -20,8 +20,6 @@
         
         <script type="text/javascript" charset="utf-8" src="cordova-1.9.0.js"></script>        
         <script type="text/javascript" charset="utf-8" src="js/scripts.js"></script>        
-        
-        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
         
         <!-- iPad/iPhone specific css below, add after your main css >
          <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />		
@@ -137,8 +135,9 @@
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
                     <span style="display: inline; text-align: center; white-space: nowrap;">
-                        <img id="mapDataView" src="imgs/noMap.jpg" onClick="adjustGpsCoords();" style="height: 80px; width: 80px;"/>
-                        <span data-dojo-type="dojox.mvc.Output" id="addressDataView" ref="urboItem.LocationAddress">${this.value}</span>
+
+                        <img id="mapDataView" src="" style="height: 80px; width: 80px;"/>
+                        <textarea id="addressDataView" readonly="readonly" data-dojo-type="dojox.mobile.TextArea" cols="25" rows="5"></textarea>
                     </span>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
@@ -172,8 +171,7 @@
             <ul data-dojo-type="dojox.mobile.RoundRectList">
                 <div id="mapWindow" style="width: 100%; min-height: 400px; height: 100%;"></div>
             </ul>
-        </div>
-        
+        </div>        
         <div id="recapitulationView" data-dojo-type="dojox.mobile.View">
             <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="newMessageView">Rekapitulace                
                 <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="uploadData()"></div>

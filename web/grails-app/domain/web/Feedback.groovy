@@ -1,13 +1,15 @@
 package web
 
 import cz.superobcan.web.FeedbackState
+import groovy.transform.EqualsAndHashCode
 
 /**
  *
  * Feedback is created by author and in the end it's send to government/city/district representative.
  *
  */
-class Feedback {
+@EqualsAndHashCode
+public class Feedback {
 
     static constraints = {
         photo nullable: true
