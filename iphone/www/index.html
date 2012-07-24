@@ -82,7 +82,10 @@
                                                             "LocationLatitude" : "",
                                                             "LocationLongitude" : "",
                                                             "LocationAddress" : "",
-                                                            "Description" : ""
+                                                            "Description" : "",
+                                                            "Author" : {"Firstname" : "",
+                                                                        "Surname" : "",
+                                                                        "Email" : ""},
                                                             }});
                     
                     
@@ -175,7 +178,7 @@
         </div>        
         <div id="recapitulationView" data-dojo-type="dojox.mobile.View">
             <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="newMessageView">Rekapitulace                
-                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="uploadData()"></div>
+                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="uploadPhoto()"></div>
             </h1>   
             
             <div data-dojo-type="dojox.mobile.RoundRectList">
@@ -196,6 +199,23 @@
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem">
                     S úctou <button data-dojo-type="dojox.mobile.Button">František Koudelka</button>
+                </li>
+            </div>
+        </div>
+        
+        <div id="profileView" data-dojo-type="dojox.mobile.View" selected="true">
+            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="recapitulationView">Profil uživatele                
+                <div data-dojo-type="dojox.mobile.ToolBarButton" label="OK" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="saveProfileChanges();"></div>
+            </h1>
+            <div data-dojo-type="dojox.mobile.RoundRectList">
+                <li data-dojo-type="dojox.mobile.ListItem">
+                    <div style="width:20%; float:left;">Jméno:</div><div style="width:80%; float:right;"><input id="firstnameField" style="width:80%;" data-dojo-type="dojox.mobile.TextBox" data-dojo-props="ref: urboItem.Author.Firstname" maxlength="30" /></div>
+                </li>
+                <li data-dojo-type="dojox.mobile.ListItem">
+                    <div style="width:20%; float:left;">Příjmení:</div> <div style="width:80%; float:right;"><input id="surnameField" style="width:80%;" data-dojo-type="dojox.mobile.TextBox" data-dojo-props="ref: urboItem.Author.Surname" maxlength="30" /></div>
+                </li>
+                <li data-dojo-type="dojox.mobile.ListItem">
+                    <div style="width:20%; float:left;">E-mail:</div><div style="width:80%; float:right;"><input id="emailField" style="width:80%;" data-dojo-type="dojox.mobile.TextBox" data-dojo-props="ref: urboItem.Author.Email" maxlength="30" /></div>
                 </li>
             </div>
         </div>

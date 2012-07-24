@@ -256,3 +256,8 @@ function guardInfoUploadSuccess(r) {
 function guardInfoUploadError(error) {
     alert("An error has occurred: Code = " + error.code);
 }
+
+function saveProfileChanges() {
+    console.log(urboItem.Author.Firstname);
+    console.log(urboItem.Author.Surname);    
+}
