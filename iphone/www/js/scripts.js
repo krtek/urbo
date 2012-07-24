@@ -1,24 +1,25 @@
-function retrieveMapForLocation(gpsCoord) {
-    var url = 'http://maps.google.com/maps/api/staticmap?center=' + gpsCoord + '&zoom=15&size=100x100&maptype=roadmap&markers=color:blue%7C' + gpsCoord + '&sensor=true'
+
+
+function retrieveMapForLocation(latitude, longitude) {
+    var url = 'http://maps.google.com/maps/api/staticmap?center=' + latitude + ',' + longitude + '&zoom=15&size=100x100&maptype=roadmap&markers=color:blue%7C' + latitude + ',' + longitude + '&sensor=true'
     mapDataView = document.getElementById("mapDataView");
     mapDataView.setAttribute('src', url)
 }
 
-function retrieveAddressForLocation(gpsCoord) {
+function retrieveAddressForLocation(latitude, longitude) {
     
     require(["dojo/_base/xhr", "dojo/dom", "dojo/_base/array", "dojo/domReady!"],
             function(xhr, dom, arrayUtil) {
             
             // Using xhr.get, as very little information is being sent
             xhr.get({
-                    url: "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + gpsCoord + "&sensor=true",
+                    url: "http://maps.googleapis.com/maps/api/geocode/json?latlng=" + latitude + ',' + longitude + "&sensor=true",
                     handleAs: "json",
                     // The success callback with result from server
                     load: function(jsonData) {
                     var addressDataView = document.getElementById('addressDataView');
                     addressDataView.innerHTML = jsonData.results[0].formatted_address.replace(/, /g, "\n");                                    
                     urboItem.LocationAddress.set('value', jsonData.results[0].formatted_address);
-                    urboItem.Location.set('value', gpsCoord);
                     },
                     error: function() {
                         addressNotFound();
@@ -78,7 +79,7 @@ function setNewGuardReport() {
 }
 
 function addressNotFound() {
-    addressDataView.innerHTML = 'Adresu se nepodařilo získat! Vyberte ji prosím ručně kliknutím na toto pole nebo obrázek.';
+    urboItem.LocationAddress.set('value', 'Adresu se nepodařilo získat! Vyberte ji prosím ručně kliknutím na toto pole nebo obrázek.');
 }
 
 function clearField(id) {
@@ -87,21 +88,25 @@ function clearField(id) {
 }
 
 function onGpsCoordsSuccess(position) {
-    var gpsCoords = position.coords.latitude + "," + position.coords.longitude;
+    refreshLocation(position.coords.latitude, position.coords.longitude);
+}
+
+function refreshLocation(latitude, longitude) {
+    urboItem.LocationLatitude.set('value', latitude);
+    urboItem.LocationLongitude.set('value', longitude);
     
-    console.log("Retrieved GPS coordinates " + gpsCoords);
+    console.log("Retrieved GPS coordinates " + urboItem.LocationLatitude + "," + urboItem.LocationLongitude);
     
-    urboItem.Location.set('value', gpsCoords);
-    
-    retrieveMapForLocation(gpsCoords);
-    retrieveAddressForLocation(gpsCoords);
+    retrieveMapForLocation(urboItem.LocationLatitude, urboItem.LocationLongitude);
+    retrieveAddressForLocation(urboItem.LocationLatitude, urboItem.LocationLongitude);
 }
 
 // onError Callback receives a PositionError object
 //
 function onGpsCoordsError(error) {
     // Need to get the GPS coords manually by selecting in a map
-    urboItem.Location.set('value', '');
+    urboItem.LocationLatitude.set('value', '');
+    urboItem.LocationLongitude.set('value', '');
     urboItem.LocationAddress.set('value', '');
     mapDataView.setAttribute('src', '');
     addressNotFound();
@@ -112,8 +117,8 @@ function getGpsCoordinates() {
 }
 
 function adjustGpsCoords() {
-    if(urboItem.Location != '') {
-        showMapToAdjust('dataView', urboItem.latitude, urboItem.longitude);
+    if(urboItem.LocationLatitude != '') {
+        showMapToAdjust('dataView', urboItem.LocationLatitude, urboItem.LocationLongitude);
     } else {
         switchView('dataView','provideAddressManuallyView');
     }
@@ -137,17 +142,51 @@ function searchGpsCoordsManually() {
                      });
 }
 
+var marker = null;
+var map = null;
+
+function createMarker(latlng) {
+    var marker = new google.maps.Marker({
+                                        position: latlng,
+                                        map: map,
+                                        zIndex: Math.round(latlng.lat()*-100000)<<5
+                                        });
+    return marker;
+}
+
 function showMapToAdjust(viewFrom, lat, long) {
     switchView(viewFrom,'getLocationManuallyView');
     
     var myOptions = {
-    zoom: 8,
+    zoom: 15,
     center: new google.maps.LatLng(lat, long),
     mapTypeControl: false,
+    zoomControl: true,
+    scaleControl: false,
+    streetViewControl: false,
     navigationControl: true,
     mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     map = new google.maps.Map(document.getElementById("mapWindow"), myOptions);
+    marker = createMarker(map.center)
+    
+    google.maps.event.addListener(map, 'click', function(event) {
+      //call function to create marker
+      if (marker) {
+        marker.setMap(null);
+        marker = null;
+      }
+      marker = createMarker(event.latLng);
+    });
+}
+
+function locationManuallySelected() {
+    if(marker != null) {
+        console.log(marker.position.lat());
+        console.log(marker.position.lng());
+        refreshLocation(marker.position.lat(), marker.position.lng());
+    }
+    switchView('getLocationManuallyView','dataView');
 }
 
 function getSomePhoto() {
@@ -183,8 +222,8 @@ function uploadData() {
             "feedback": {
                "title": urboItem.Title.value,
                "description": urboItem.Description.value,
-               "latitude": urboItem.Location.value.split(',')[0],
-               "longitude": urboItem.Location.value.split(',')[1],                       
+               "latitude": urboItem.LocationLatitude,
+               "longitude": urboItem.LocationLongitude,                       
            }
        }
 

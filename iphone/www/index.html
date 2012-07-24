@@ -79,7 +79,8 @@
                                                             "Title" : "", 
                                                             "PhotoSelected" : "false",
                                                             "PhotoURI" : "",
-                                                            "Location" : "",
+                                                            "LocationLatitude" : "",
+                                                            "LocationLongitude" : "",
                                                             "LocationAddress" : "",
                                                             "Description" : ""
                                                             }});
@@ -120,7 +121,7 @@
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
                     <span style="display: inline; text-align: center; white-space: nowrap;">
                         <img id="mapDataView" src="imgs/noMap.jpg" onClick="adjustGpsCoords();" style="height: 80px; width: 80px;"/>
-                        <span data-dojo-type="dojox.mvc.Output" id="addressDataView"></span>
+                        <span data-dojo-type="dojox.mvc.Output" id="addressDataView" ref="urboItem.LocationAddress">${this.value}</span>
                     </span>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
@@ -149,10 +150,10 @@
         
         <div id="getLocationManuallyView" data-dojo-type="dojox.mobile.View">
             <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="dataView">Mapa
-                <div data-dojo-type="dojox.mobile.ToolBarButton" label="OK" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick=""></div>
+                <div data-dojo-type="dojox.mobile.ToolBarButton" label="OK" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="locationManuallySelected();"></div>
             </h1>
             <ul data-dojo-type="dojox.mobile.RoundRectList">
-                <div id="mapWindow" style="width: 100%; height: 100%;"></div>
+                <div id="mapWindow" style="width: 100%; min-height: 400px; height: 100%;"></div>
             </ul>
         </div>
         
