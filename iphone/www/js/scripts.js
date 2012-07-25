@@ -62,7 +62,7 @@ function getPhoto(photoSourceType) {
                                 });
 }
 
-function setNewGuardReport() {
+function prepareNewMessage() {
     var photoDataView = document.getElementById('photoDataView')
     photoDataView.style.backgroundImage="";
     photoDataView.innerHTML = "Vybrat foto";
@@ -116,7 +116,7 @@ function getGpsCoordinates() {
     navigator.geolocation.getCurrentPosition(onGpsCoordsSuccess, onGpsCoordsError);
 }
 
-function adjustGpsCoords() {
+function adjustLocation() {
     if(urboItem.LocationLatitude != '') {
         showMapToAdjust('newMessageView', urboItem.LocationLatitude, urboItem.LocationLongitude);
     } else {
@@ -255,4 +255,9 @@ function guardInfoUploadSuccess(r) {
 
 function guardInfoUploadError(error) {
     alert("An error has occurred: Code = " + error.code);
+}
+
+function saveProfileChanges() {
+    console.log(urboItem.Author.Firstname);
+    console.log(urboItem.Author.Surname);    
 }
