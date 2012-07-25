@@ -11,8 +11,6 @@ import groovy.transform.EqualsAndHashCode
 @EqualsAndHashCode
 public class Feedback {
 
-    static belongsTo = [author: Author]
-
     //static embedded = ['photo', 'location', 'authorityResponse']
 
     static constraints = {

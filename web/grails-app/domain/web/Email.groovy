@@ -1,7 +1,6 @@
 package web
 
 class Email {
-    static belongsTo = [author: Author]
 
     static constraints = {
     }
