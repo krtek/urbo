@@ -61,7 +61,9 @@ class FeedbackControllerTests {
 
                                     """
 
-        assert StringUtils.deleteWhitespace(response.text) == StringUtils.deleteWhitespace(expectedJsonResponse)
+        String.metaClass.deleteWhitespace = StringUtils.&deleteWhitespace
+
+        assert response.text.deleteWhitespace() == expectedJsonResponse.deleteWhitespace()
 
     }
 

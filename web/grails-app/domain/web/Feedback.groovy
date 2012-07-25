@@ -12,16 +12,16 @@ import groovy.transform.EqualsAndHashCode
 public class Feedback {
 
     static constraints = {
-        photo nullable: true
+        photoId nullable: false
         description nullable: true
         authorityResponse nullable: true
     }
 
-    static embedded = ['photo', 'location', 'authorityResponse']
+    static embedded = ['location', 'authorityResponse']
 
     String title
 
-    Photo photo
+    Long photoId
 
     String description
 

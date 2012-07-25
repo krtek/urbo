@@ -99,4 +99,12 @@ class FeedbackController {
 
     }
 
+    def uploadPhoto() {
+
+        def uploadedFile = request.getFile("file")
+
+
+
+    }
+
 }
