@@ -12,6 +12,6 @@ import org.junit.*
 class FeedbackServiceTests {
 
     void testSomething() {
-        fail "Implement me"
+
     }
 }
