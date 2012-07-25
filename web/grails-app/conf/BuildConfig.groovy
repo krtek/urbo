@@ -6,6 +6,8 @@ grails.project.target.level = 1.6
 grails.project.source.level = 1.6
 //grails.project.war.file = "target/${appName}-${appVersion}.war"
 
+
+
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {
@@ -52,5 +54,9 @@ grails.project.dependency.resolution = {
         runtime ":database-migration:1.1"
 
         compile ':cache:1.0.0'
+
+        //twitter bootstrap scaffolding
+        runtime (":twitter-bootstrap:2.0.2.25") { excludes 'svn' }
+        runtime ':fields:1.0.1'
     }
 }
