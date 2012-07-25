@@ -32,21 +32,25 @@ class FeedbackTestUtils {
 
                 new Feedback(
                         author: michal,
-                        title: "přechod pro chodce má zelenou moc krátce",
-                        location: new Location(latitude: 50.076, longitude: 14.408)
+                        title: "Přechod pro chodce má zelenou moc krátce",
+                        location: new Location(latitude: 50.076, longitude: 14.408),
+                        state: FeedbackState.CREATED
                 ),
 
                 new Feedback(
                         author: michal,
-                        title: "někdo hodil karamelovýho draka do pisoáru",
+                        title: "Někdo hodil karamelovýho draka do pisoáru",
                         description: "děsně to zapáchá",
-                        location: new Location(latitude: 50.07647, longitude: 14.40216)
+                        location: new Location(latitude: 50.07647, longitude: 14.40216),
+                        state: FeedbackState.CREATED
                 ),
 
                 new Feedback(
                         author: krtek,
-                        title: "rozsypaná popelnice",
-                        location: new Location(latitude: 50.02678, longitude: 14.43455)
+                        title: "Rozsypaná popelnice",
+                        description: "Na chodníku se válí krabice, slepice, konvice, truhlice, \n hned pošlete oranžový čepice!",
+                        location: new Location(latitude: 50.02678, longitude: 14.43455),
+                        state: FeedbackState.CREATED
                 )
         ]
 

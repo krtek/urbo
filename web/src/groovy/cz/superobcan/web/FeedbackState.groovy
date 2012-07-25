@@ -9,6 +9,11 @@ public enum FeedbackState {
     CREATED,
 
     /**
+     * Ready to send to authority
+     */
+    READY_TO_SEND,
+
+    /**
      * when government authority (ward's council...etc.) was informed about citizen's feedback
      */
     SENT_TO_AUTHORITY,

@@ -66,7 +66,6 @@ environments {
         grails.logging.jul.usebridge = true
 
         log4j = {
-            trace 'org.hibernate.type'
             debug 'org.hibernate.SQL'
         }
     }
@@ -97,3 +96,18 @@ log4j = {
            'net.sf.ehcache.hibernate'
 
 }
+
+grails {
+    mail {
+        host = "smtp.gmail.com"
+        port = 465
+        username = "info@urbo.cz"
+        password = "***"
+        props = ["mail.smtp.auth":"true",
+                "mail.smtp.socketFactory.port":"465",
+                "mail.smtp.socketFactory.class":"javax.net.ssl.SSLSocketFactory",
+                "mail.smtp.socketFactory.fallback":"false"]
+    }
+}
+
+markdown.hardwraps = true
