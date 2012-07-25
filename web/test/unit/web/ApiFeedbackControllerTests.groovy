@@ -1,16 +1,16 @@
 package web
 
-import api.FeedbackController
 import cz.superobcan.web.FeedbackTestUtils
 import grails.test.MockUtils
 import grails.test.mixin.*
 import org.apache.commons.lang.StringUtils
+import api.ApiFeedbackController
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
-@TestFor(FeedbackController)
+@TestFor(ApiFeedbackController)
 @Mock([Feedback])
-class FeedbackControllerTests {
+class ApiFeedbackControllerTests {
 
     void testFindAllJsonResponse() {
 

@@ -10,7 +10,7 @@ import web.Location
 /**
  * This is WEB API of URBO Application
  */
-class FeedbackController {
+class ApiFeedbackController {
 
     static allowedMethods = [save: 'POST']
 

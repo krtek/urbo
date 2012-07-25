@@ -2,6 +2,6 @@ package admin
 
 import web.Photo
 
-class PhotoCrudController {
+class PhotoController {
     static def scaffold = Photo
 }

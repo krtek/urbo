@@ -7,16 +7,16 @@ class UrlMappings {
 			}
 		}
 
-        "/admin/case"(controller: "feedbackCrud")
-        "/admin/author"(controller:  "authorCrud")
+        "/admin/case"(controller: "feedback")
+        "/admin/author"(controller:  "author")
 
-        "/api/v1/case"(controller: "feedback") {
+        "/api/v1/case"(controller: "apiFeedback") {
             action = [GET: "findAll", POST: "save"]
         }
 
         //"/api/v1/case/new"(controller: "feedback", action: "save")
 
-        "/api/v1/case/$id"(controller: "feedback", action: "findById")
+        "/api/v1/case/$id"(controller: "apiFeedback", action: "findById")
 
         "/api/v1/"(controller: "apiHelp")
 

@@ -2,6 +2,6 @@ package admin
 
 import web.Email
 
-class EmailCrudController {
+class EmailController {
     static def scaffold = Email
 }

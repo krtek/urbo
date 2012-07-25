@@ -2,7 +2,7 @@ package admin
 
 import web.Feedback
 
-class FeedbackCrudController {
+class FeedbackController {
 
     static def scaffold = Feedback
 }

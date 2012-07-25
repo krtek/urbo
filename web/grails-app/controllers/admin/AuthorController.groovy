@@ -1,6 +1,6 @@
 package admin
 
-class AuthorCrudController {
+class AuthorController {
 
     static def scaffold = web.Author
 }

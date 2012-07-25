@@ -1,16 +1,16 @@
 package cz.superobcan.web.cz.superobcan
 
-import api.FeedbackController
 import org.apache.commons.lang.StringUtils
 import org.junit.Test
 import org.springframework.http.HttpMethod
 import web.Feedback
+import api.ApiFeedbackController
 
 class FeedbackApiSaveFailuresTest extends GroovyTestCase {
 
     @Test
     void shouldNotSaveWhenSaveJsonApiWithMissingTitleIsCalled() {
-        def controller = new FeedbackController()
+        def controller = new ApiFeedbackController()
 
         controller.request.contentType = "text/json"
         controller.request.content = '''
@@ -35,7 +35,7 @@ class FeedbackApiSaveFailuresTest extends GroovyTestCase {
 
     @Test
     void shouldResponseWithErrorJsonWhenSaveJsonApiWithMissingTitleIsCalled() {
-        def controller = new FeedbackController()
+        def controller = new ApiFeedbackController()
 
         controller.request.contentType = "text/json"
         controller.request.content = '''

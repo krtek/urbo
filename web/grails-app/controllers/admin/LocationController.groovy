@@ -2,6 +2,6 @@ package admin
 
 import web.Location
 
-class LocationCrudController {
+class LocationController {
     static def scaffold = Location
 }
