@@ -3,10 +3,7 @@ package web
 class Author {
 
     static hasMany = [feedback : Feedback]
-
     static embedded = ['email']
-
-    static belongsTo = Feedback
 
     static constraints = {
     }
@@ -15,4 +12,9 @@ class Author {
     String surname
 
     Email email
+
+    @Override
+    String toString() {
+        "${name} ${surname}"
+    }
 }

@@ -20,6 +20,8 @@
         
         <script type="text/javascript" charset="utf-8" src="cordova-1.9.0.js"></script>        
         <script type="text/javascript" charset="utf-8" src="js/scripts.js"></script>        
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+
         
         <!-- iPad/iPhone specific css below, add after your main css >
          <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />		
@@ -80,7 +82,10 @@
                                                             "LocationLatitude" : "",
                                                             "LocationLongitude" : "",
                                                             "LocationAddress" : "",
-                                                            "Description" : ""
+                                                            "Description" : "",
+                                                            "Author" : {"Firstname" : "",
+                                                                        "Surname" : "",
+                                                                        "Email" : ""},
                                                             }});
                     
                     
@@ -110,15 +115,14 @@
                     </center>
                 </li>
 
-                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="switchView('menuView', 'newMessageView');" data-dojo-props='variableHeight:true'>Nová urbo zpráva</li>
+                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="prepareNewMessage();switchView('menuView', 'newMessageView');" data-dojo-props='variableHeight:true'>Nová urbo zpráva</li>
                 <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="switchView('menuView', 'myMessagesView');" data-dojo-props='variableHeight:true'>Moje urbo zprávy</li>
                 <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="switchView('menuView', 'aboutAppView');" data-dojo-props='variableHeight:true'>O aplikaci...</li>
             </div>
         </div>
         
         <div id="newMessageView" data-dojo-type="dojox.mobile.View">
-            <h1 data-dojo-type="dojox.mobile.Heading" label="Zpráva">
-                <div data-dojo-type="dojox.mobile.ToolBarButton" style="padding: 0px 14px" onClick="setNewGuardReport();">Nová</div>
+            <h1 data-dojo-type="dojox.mobile.Heading" label="Nová zpráva" back="Zpět" moveTo="menuView">
                 <div data-dojo-type="dojox.mobile.ToolBarButton" label="Další" moveTo="recapitulationView" style="float:right;"></div>
             </h1>
             
@@ -136,7 +140,7 @@
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
                     <span style="display: inline; text-align: center; white-space: nowrap;">
 
-                        <img id="mapDataView" src="" style="height: 80px; width: 80px;"/>
+                        <img id="mapDataView" src="" style="height: 80px; width: 80px;" onClick="adjustLocation()" />
                         <textarea id="addressDataView" readonly="readonly" data-dojo-type="dojox.mobile.TextArea" cols="25" rows="5"></textarea>
                     </span>
                 </li>
@@ -174,7 +178,7 @@
         </div>        
         <div id="recapitulationView" data-dojo-type="dojox.mobile.View">
             <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="newMessageView">Rekapitulace                
-                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="uploadData()"></div>
+                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="uploadPhoto()"></div>
             </h1>   
             
             <div data-dojo-type="dojox.mobile.RoundRectList">
@@ -195,6 +199,23 @@
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem">
                     S úctou <button data-dojo-type="dojox.mobile.Button">František Koudelka</button>
+                </li>
+            </div>
+        </div>
+        
+        <div id="profileView" data-dojo-type="dojox.mobile.View" selected="true">
+            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="recapitulationView">Profil uživatele                
+                <div data-dojo-type="dojox.mobile.ToolBarButton" label="OK" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="saveProfileChanges();"></div>
+            </h1>
+            <div data-dojo-type="dojox.mobile.RoundRectList">
+                <li data-dojo-type="dojox.mobile.ListItem">
+                    <div style="width:20%; float:left;">Jméno:</div><div style="width:80%; float:right;"><input id="firstnameField" style="width:80%;" data-dojo-type="dojox.mobile.TextBox" data-dojo-props="ref: urboItem.Author.Firstname" maxlength="30" /></div>
+                </li>
+                <li data-dojo-type="dojox.mobile.ListItem">
+                    <div style="width:20%; float:left;">Příjmení:</div> <div style="width:80%; float:right;"><input id="surnameField" style="width:80%;" data-dojo-type="dojox.mobile.TextBox" data-dojo-props="ref: urboItem.Author.Surname" maxlength="30" /></div>
+                </li>
+                <li data-dojo-type="dojox.mobile.ListItem">
+                    <div style="width:20%; float:left;">E-mail:</div><div style="width:80%; float:right;"><input id="emailField" style="width:80%;" data-dojo-type="dojox.mobile.TextBox" data-dojo-props="ref: urboItem.Author.Email" maxlength="30" /></div>
                 </li>
             </div>
         </div>

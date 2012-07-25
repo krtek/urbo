@@ -4,5 +4,5 @@ import web.Feedback
 
 class FeedbackCrudController {
 
-    def scaffold = Feedback
+    static def scaffold = Feedback
 }
