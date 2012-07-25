@@ -6,6 +6,7 @@ import web.Author
 import web.Email
 import web.Feedback
 import web.Location
+import web.Photo
 
 /**
  * This is WEB API of URBO Application
@@ -97,6 +98,29 @@ class ApiFeedbackController {
         else {
             def feedbacksAsJson = feedbackService.convertToJson(feedback)
             render(contentType: "application/json", text: feedbacksAsJson)
+        }
+
+    }
+
+    def uploadPhoto() {
+
+        def uploadedFile = request.getFile("file")
+        def photo = new Photo()
+        photo.data = uploadedFile
+
+        photo.save()
+
+        // TODO mbernhard : exception reaction
+
+        render(contentType: "application/json") {
+
+            status: "200"
+            message:
+                  "File uploaded successfully and saved with id ${photo.id}. " +
+                  "Use this id when creating new feedback through api as photoId parameter." +
+                      "PhotoId is easily accessible as photoId parameter of this response object."
+            photoId: photo.id
+
         }
 
     }
