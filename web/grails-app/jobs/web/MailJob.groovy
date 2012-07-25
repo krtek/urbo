@@ -4,7 +4,7 @@ import cz.superobcan.web.FeedbackState
 
 class MailJob {
     static triggers = {
-      simple repeatInterval: 60 * 1000L // execute job once in 5 seconds
+      simple repeatInterval: 10 * 1000L // execute job once in 5 seconds
     }
 
     //injected automagically
@@ -15,9 +15,13 @@ class MailJob {
         def readyToSend = findReadyFeedbacks()
         readyToSend.each {feedback ->
             mailService.sendMail {
+                multipart true
                 to "lukas.marek@gmail.com"
                 subject formatSubject(feedback.title)
                 html formatBody(feedback.title, feedback.description, feedback.author.toString())
+                if (feedback.photo) {
+                    attachBytes "obrazek.jpg",'image/jpg', feedback.photo.data
+                }
             }
             feedback.state = FeedbackState.SENT_TO_AUTHORITY
             feedback.save()
@@ -44,8 +48,6 @@ ${description}
 
 S pozdravem,
 ${author} a [Urbo](http://urbo.cz)
-
-###### **Zpráva byla generována systémem [Urbo](http://urbo.cz)**
 """
 
         message.markdownToHtml()
