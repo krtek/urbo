@@ -9,6 +9,6 @@ class Location {
 
     @Override
     String toString() {
-        "Latitude: $latitude | Longitude: $longitude"
+        "${latitude}, ${longitude}"
     }
 }
