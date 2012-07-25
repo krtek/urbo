@@ -22,6 +22,7 @@ public class Feedback {
         author()
         photo nullable: true
         authorityResponse nullable: true
+        state()
     }
 
     String title
@@ -33,4 +34,8 @@ public class Feedback {
     AuthorityResponse authorityResponse
 
     FeedbackState state = FeedbackState.CREATED // as this is default state
+    @Override
+    String toString() {
+        "${author}: ${title}"
+    }
 }
