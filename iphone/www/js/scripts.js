@@ -1,5 +1,4 @@
 
-
 function retrieveMapForLocation(latitude, longitude) {
     var url = 'http://maps.google.com/maps/api/staticmap?center=' + latitude + ',' + longitude + '&zoom=15&size=100x100&maptype=roadmap&markers=color:red%7C' + latitude + ',' + longitude + '&sensor=true'
     mapDataView = document.getElementById("mapDataView");
@@ -19,7 +18,7 @@ function retrieveAddressForLocation(latitude, longitude) {
                     load: function(jsonData) {
                     var addressDataView = document.getElementById('addressDataView');
                     addressDataView.innerHTML = jsonData.results[0].formatted_address.replace(/, /g, "\n");                                    
-                    urboItem.LocationAddress.set('value', jsonData.results[0].formatted_address);
+                    urboItem.Location.Address.set('value', jsonData.results[0].formatted_address);
                     },
                     error: function() {
                         addressNotFound();
@@ -79,7 +78,7 @@ function prepareNewMessage() {
 }
 
 function addressNotFound() {
-    urboItem.LocationAddress.set('value', 'Adresu se nepodařilo získat! Vyberte ji prosím ručně kliknutím na toto pole nebo obrázek.');
+    urboItem.Location.Address.set('value', 'Adresu se nepodařilo získat! Vyberte ji prosím ručně kliknutím na toto pole nebo obrázek.');
 }
 
 function clearField(id) {
@@ -92,22 +91,22 @@ function onGpsCoordsSuccess(position) {
 }
 
 function refreshLocation(latitude, longitude) {
-    urboItem.LocationLatitude.set('value', latitude);
-    urboItem.LocationLongitude.set('value', longitude);
+    urboItem.Location.Latitude.set('value', latitude);
+    urboItem.Location.Longitude.set('value', longitude);
     
-    console.log("Retrieved GPS coordinates " + urboItem.LocationLatitude + "," + urboItem.LocationLongitude);
+    console.log("Retrieved GPS coordinates " + urboItem.Location.Latitude + "," + urboItem.Location.Longitude);
     
-    retrieveMapForLocation(urboItem.LocationLatitude, urboItem.LocationLongitude);
-    retrieveAddressForLocation(urboItem.LocationLatitude, urboItem.LocationLongitude);
+    retrieveMapForLocation(urboItem.Location.Latitude, urboItem.Location.Longitude);
+    retrieveAddressForLocation(urboItem.Location.Latitude, urboItem.Location.Longitude);
 }
 
 // onError Callback receives a PositionError object
 //
 function onGpsCoordsError(error) {
     // Need to get the GPS coords manually by selecting in a map
-    urboItem.LocationLatitude.set('value', '');
-    urboItem.LocationLongitude.set('value', '');
-    urboItem.LocationAddress.set('value', '');
+    urboItem.Location.Latitude.set('value', '');
+    urboItem.Location.Longitude.set('value', '');
+    urboItem.Location.Address.set('value', '');
     mapDataView.setAttribute('src', '');
     addressNotFound();
 }
@@ -117,8 +116,8 @@ function getGpsCoordinates() {
 }
 
 function adjustLocation() {
-    if(urboItem.LocationLatitude != '') {
-        showMapToAdjust('newMessageView', urboItem.LocationLatitude, urboItem.LocationLongitude);
+    if(urboItem.Location.Latitude != '') {
+        showMapToAdjust('newMessageView', urboItem.Location.Latitude, urboItem.Location.Longitude);
     } else {
         switchView('newMessageView','provideAddressManuallyView');
     }
@@ -222,8 +221,8 @@ function uploadData() {
             "feedback": {
                "title": urboItem.Title.value,
                "description": urboItem.Description.value,
-               "latitude": urboItem.LocationLatitude,
-               "longitude": urboItem.LocationLongitude,                       
+               "latitude": urboItem.Location.Latitude,
+               "longitude": urboItem.Location.Longitude,                       
            }
        }
 
@@ -257,7 +256,66 @@ function guardInfoUploadError(error) {
     alert("An error has occurred: Code = " + error.code);
 }
 
+function setSignature() {
+    if(urboItem.Author.Firstname != '' &&  urboItem.Author.Firstname != '') {
+        document.getElementById('signature').innerHTML = urboItem.Author.Firstname + ' ' + urboItem.Author.Surname;
+    } else {
+        document.getElementById('signature').innerHTML = "Prosím vyplnit.";
+    }
+}
+
+// Profile settings
+
+function setNicknameField() {
+    if(document.getElementById('nicknameCB').checked) {
+        document.getElementById('nicknameField').value = urboItem.Author.Nickname;
+    } else {
+        document.getElementById('nicknameField').value = 'Anonymous';       
+    }
+}
+
+function enteringProfileView() {
+
+    document.getElementById('nicknameField').value = urboItem.Author.Nickname; 
+    document.getElementById('firstnameField').value = urboItem.Author.Firstname;
+    document.getElementById('surnameField').value = urboItem.Author.Surname;
+    document.getElementById('emailField').value = urboItem.Author.Email;
+    
+    if(urboItem.Author.Nickname != '') {
+        document.getElementById('nicknameCB').checked = true;
+        document.getElementById('nicknameField').readOnly = false;
+    } else {
+        document.getElementById('nicknameCB').checked = false;
+        document.getElementById('nicknameField').readOnly = true;
+    }
+    setNicknameField();
+    
+    switchView('recapView', 'profileView');
+}
+
 function saveProfileChanges() {
-    console.log(urboItem.Author.Firstname);
-    console.log(urboItem.Author.Surname);    
+    if(document.getElementById('nicknameField').value == '' ||
+       document.getElementById('firstnameField').value == '' ||
+       document.getElementById('surnameField').value == '' ||
+       document.getElementById('emailField').value == '') {
+        alert('Chybějící údaje\n\nProsím vyplňte všechna pole.');
+        return false;
+    }
+    
+    urboItem.Author.Nickname = document.getElementById('nicknameField').value;
+    urboItem.Author.Firstname = document.getElementById('firstnameField').value;
+    urboItem.Author.Surname = document.getElementById('surnameField').value;
+    urboItem.Author.Email = document.getElementById('emailField').value;
+
+    // Persist all profile values to storage
+    var store = new Lawnchair({name:'urboProfile'}, function(store) {
+        store.save({key:'nickname', value: urboItem.Author.Nickname});
+        store.save({key:'firstname', value: urboItem.Author.Firstname});
+        store.save({key:'surname', value: urboItem.Author.Surname});
+        store.save({key:'email', value: urboItem.Author.Email});
+    });
+
+    setSignature();
+                              
+    switchView('profileView', 'recapView');
 }
