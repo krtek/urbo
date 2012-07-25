@@ -20,8 +20,8 @@
         
         <script type="text/javascript" charset="utf-8" src="cordova-1.9.0.js"></script>        
         <script type="text/javascript" charset="utf-8" src="js/scripts.js"></script>        
-        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-
+        <script type="text/javascript" charset="utf-8" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+        <script type="text/javascript" charset="utf-8" src="js/lawnchair-0.6.1.min.js"></script>
         
         <!-- iPad/iPhone specific css below, add after your main css >
          <link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />		
@@ -54,21 +54,34 @@
              see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
              for more details -jm */
             function onDeviceReady() {
+
+            }
+            
+            function readStoredValue(store, key) {
+                var retValue = '';
+                store.exists(key, function(exists) {
+                             if(exists) {
+                                 store.get(key, function(readObject) {
+                                              retValue = readObject.value;
+                                           });
+                             }
+                             });
+                return retValue;
             }
             
             // Load the widget parser and mobile base
             require([
-                     "dojox/mobile/parser", 
-                     "dojox/mobile/deviceTheme", 
-                     "dojox/mobile/compat", 
+                     "dojox/mobile/parser", // must be as the first required object
                      "dojox/mobile",
-                     "dojox/mobile/ScrollableView",
+                     "dojox/mobile/compat", 
+                     "dojox/mobile/deviceTheme", 
                      "dojox/mobile/Button",
                      "dojox/mobile/CheckBox",
-                     "dojox/mobile/IconItem",                             
-                     "dojox/mobile/TextBox",
-                     "dojox/mobile/TextArea",
                      "dojox/mobile/ExpandingTextArea",
+                     "dojox/mobile/IconItem",                             
+                     "dojox/mobile/ScrollableView",
+                     "dojox/mobile/TextArea",
+                     "dojox/mobile/TextBox",
                      "dojox/mvc",
                      "dojox/mvc/Group",
                      "dojox/mvc/Output"
@@ -77,21 +90,32 @@
                     
                     urboItem = dojox.mvc.newStatefulModel({ data : {
                                                             "Title" : "", 
-                                                            "PhotoSelected" : "false",
-                                                            "PhotoURI" : "",
-                                                            "LocationLatitude" : "",
-                                                            "LocationLongitude" : "",
-                                                            "LocationAddress" : "",
+                                                            "Photo" : {"Selected" : false,
+                                                                       "URI" : ""},
+                                                            "Location" : {"Latitude" : "",
+                                                                          "Longitude" : "",
+                                                                          "Address" : ""},
                                                             "Description" : "",
                                                             "Author" : {"Firstname" : "",
                                                                         "Surname" : "",
                                                                         "Email" : ""},
                                                             }});
-                    
+
+                    // Try to read all stored values
+                    var store = new Lawnchair({name:'urboProfile'}, function(store) {
+                                                urboItem.Author.Firstname = readStoredValue(store, 'firstname');
+                                                urboItem.Author.Surname = readStoredValue(store, 'firstname');
+                                                urboItem.Author.Email = readStoredValue(store, 'firstname');
+                                              });
                     
                     // Parse the page for widgets!
                     parser.parse();
                     
+//                    dojo.connect(document.getElementById('profileView'), "onBeforeTransitionIn", null,
+//                                 function(moveTo, dir, transition, context, method){
+//                                     console.log('Entering view'); 
+//                                     enteringProfileView();
+//                                 });
                     }
                     );
             
@@ -105,25 +129,31 @@
     </head>
     <body onload="onBodyLoad()">
         
-        
-        <div id="menuView" data-dojo-type="dojox.mobile.View">
+        <!-- 
+         A view represents one container (typically a page, dialog) in the mobile device.
+         The first view will be the selected, or the one with 'selected' attribute set to 'true' 
+         -->
+        <div id="menuView" data-dojo-type="dojox.mobile.View" selected="true">
             <div data-dojo-type="dojox.mobile.RoundRectList">
-                <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props="variableHeight:true">
+                <li data-dojo-type="dojox.mobile.ListItem">
                     <center>
-                        <div>URBO 0.1 beta private</div><br/>
-                        <img src="imgs/urbo.png" width="200" height="240" />
+                        <div><b>URBO 0.1 beta private</b></div>
                     </center>
                 </li>
-
-                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="prepareNewMessage();switchView('menuView', 'newMessageView');" data-dojo-props='variableHeight:true'>Nová urbo zpráva</li>
-                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="switchView('menuView', 'myMessagesView');" data-dojo-props='variableHeight:true'>Moje urbo zprávy</li>
-                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="switchView('menuView', 'aboutAppView');" data-dojo-props='variableHeight:true'>O aplikaci...</li>
+                <li data-dojo-type="dojox.mobile.ListItem" moveTo="newMessageView" transition="slide" onClick="prepareNewMessage();">Nová urbo zpráva</li>
+                <li data-dojo-type="dojox.mobile.ListItem" moveTo="myMessagesView" transtion="slide">Moje urbo zprávy</li>
+                <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props="variableHeight:true">
+                    <center>
+                        <img src="imgs/urbo.png" width="180" height="220" />
+                    </center>
+                </li>
+                <li data-dojo-type="dojox.mobile.ListItem" moveTo="aboutAppView" transition="slide">O aplikaci...</li>
             </div>
         </div>
         
         <div id="newMessageView" data-dojo-type="dojox.mobile.View">
             <h1 data-dojo-type="dojox.mobile.Heading" label="Nová zpráva" back="Zpět" moveTo="menuView">
-                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Další" moveTo="recapitulationView" style="float:right;"></div>
+                <div data-dojo-type="dojox.mobile.ToolBarButton" label="Další" onClick="enterRecapView();" style="float:right;"></div>
             </h1>
             
             <div data-dojo-type="dojox.mobile.RoundRectList">
@@ -151,7 +181,7 @@
         </div>
         
         <div id="getSomePhotoView" data-dojo-type="dojox.mobile.View">
-            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="newMessageView">Přidání fotky</h1>
+            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="newMessageView" transition="slide">Přidání fotky</h1>
             <ul data-dojo-type="dojox.mobile.RoundRectList">
                 <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="getPhoto(Camera.PictureSourceType.CAMERA)" data-dojo-props='variableHeight:true'>Kamera</li>
                 <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="getPhoto(Camera.PictureSourceType.PHOTOLIBRARY)">Galerie fotek</li>
@@ -176,7 +206,7 @@
                 <div id="mapWindow" style="width: 100%; min-height: 400px; height: 100%;"></div>
             </ul>
         </div>        
-        <div id="recapitulationView" data-dojo-type="dojox.mobile.View">
+        <div id="recapView" data-dojo-type="dojox.mobile.View">
             <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="newMessageView">Rekapitulace                
                 <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="uploadPhoto()"></div>
             </h1>   
@@ -192,30 +222,33 @@
                     <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: urboItem.Description">${this.value.trunc(300, true)}</span>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
-                    Kde: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: urboItem.LocationAddress">${this.value}</span>
+                    Kde: <br/><span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: urboItem.Location.Address">${this.value.replace(/\\n/g, "<br/>")}</span>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
-                    Fotka přiložena: <input data-dojo-type="dojox.mobile.CheckBox" type="checkbox" readonly="readonly" data-dojo-props='checked:(urboItem.PhotoURI != "")' style="float:right;" />
+                    Fotka přiložena: <input id="photoAttachedCB" data-dojo-type="dojox.mobile.CheckBox" type="checkbox" readonly="readonly" style="float:right;" />
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem">
-                    S úctou <button data-dojo-type="dojox.mobile.Button">František Koudelka</button>
+                    S úctou <button id="signature" data-dojo-type="dojox.mobile.Button" onClick="enterProfileView();" />
                 </li>
             </div>
         </div>
         
-        <div id="profileView" data-dojo-type="dojox.mobile.View" selected="true">
-            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="recapitulationView">Profil uživatele                
+        <div id="profileView" data-dojo-type="dojox.mobile.View">
+            <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="recapView">Profil uživatele                
                 <div data-dojo-type="dojox.mobile.ToolBarButton" label="OK" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="saveProfileChanges();"></div>
             </h1>
             <div data-dojo-type="dojox.mobile.RoundRectList">
                 <li data-dojo-type="dojox.mobile.ListItem">
-                    <div style="width:20%; float:left;">Jméno:</div><div style="width:80%; float:right;"><input id="firstnameField" style="width:80%;" data-dojo-type="dojox.mobile.TextBox" data-dojo-props="ref: urboItem.Author.Firstname" maxlength="30" /></div>
+                    <div style="float:left;">Anonymní odeslání</div><div id="anonSwitch" data-dojo-type="dojox.mobile.Switch" style="float:right;" value="on" leftLabel="Ano" rightLabel="Ne"></div>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem">
-                    <div style="width:20%; float:left;">Příjmení:</div> <div style="width:80%; float:right;"><input id="surnameField" style="width:80%;" data-dojo-type="dojox.mobile.TextBox" data-dojo-props="ref: urboItem.Author.Surname" maxlength="30" /></div>
+                    <div style="float:left;">Jméno:</div><div style="float:right;"><input id="firstnameField" style= data-dojo-type="dojox.mobile.TextBox" maxlength="30" /></div>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem">
-                    <div style="width:20%; float:left;">E-mail:</div><div style="width:80%; float:right;"><input id="emailField" style="width:80%;" data-dojo-type="dojox.mobile.TextBox" data-dojo-props="ref: urboItem.Author.Email" maxlength="30" /></div>
+                    <div style="float:left;">Příjmení:</div> <div style="float:right;"><input id="surnameField" style= data-dojo-type="dojox.mobile.TextBox" maxlength="30" /></div>
+                </li>
+                <li data-dojo-type="dojox.mobile.ListItem">
+                    <div style="float:left;">E-mail:</div><div style="float:right;"><input id="emailField" data-dojo-type="dojox.mobile.TextBox" maxlength="30" /></div>
                 </li>
             </div>
         </div>
