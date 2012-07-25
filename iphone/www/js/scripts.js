@@ -1,5 +1,4 @@
 
-
 function retrieveMapForLocation(latitude, longitude) {
     var url = 'http://maps.google.com/maps/api/staticmap?center=' + latitude + ',' + longitude + '&zoom=15&size=100x100&maptype=roadmap&markers=color:red%7C' + latitude + ',' + longitude + '&sensor=true'
     mapDataView = document.getElementById("mapDataView");
@@ -18,8 +17,8 @@ function retrieveAddressForLocation(latitude, longitude) {
                     // The success callback with result from server
                     load: function(jsonData) {
                     var addressDataView = document.getElementById('addressDataView');
-                    addressDataView.innerHTML = jsonData.results[0].formatted_address.replace(/, /g, "\n");                                    
-                    urboItem.LocationAddress.set('value', jsonData.results[0].formatted_address);
+                    urboItem.Location.Address.set('value', jsonData.results[0].formatted_address.replace(/, /g, "\n"));
+                    addressDataView.innerHTML = urboItem.Location.Address;                                    
                     },
                     error: function() {
                         addressNotFound();
@@ -33,30 +32,33 @@ function retrieveAddressForLocation(latitude, longitude) {
 // Photo capture functions
 // Called when a photo is successfully retrieved
 //
-function onPhotoURISuccess(photoURI) {
-    urboItem.PhotoSelected = true;
-    urboItem.PhotoURI = photoURI;
+function onPhotoSuccess(photoURI) {
+    console.log("Selected photo on uri: " + photoURI);
+    
+    urboItem.Photo.Selected = true;
+    urboItem.Photo.URI = photoURI;
     
     var photoDataView = document.getElementById('photoDataView');
-    photoDataView.style.backgroundImage="url('" + photoURI + "')"
-    photoDataView.innerHTML = ""
-    
-    getGpsCoordinates();
+    photoDataView.style.backgroundImage = "url('" + photoURI + "')";
+    photoDataView.innerHTML = "";
 
-    switchView('getSomePhotoView', 'newMessageView')
+    switchView('getSomePhotoView', 'newMessageView', -1);
 }
 
-function switchView(fromView, toView) {
+/*
+ Performs switch between two views. The slide transition effect is used. 
+*/
+function switchView(fromView, toView, direction) {
     var w = dijit.byId(fromView);
-    w.performTransition(toView,-1,"fade",null);                        
+    w.performTransition(toView, direction, "slide", null);                        
 }
 
 function onFail(message) {
-    switchView('getSomePhotoView', 'newMessageView')
+    switchView('getSomePhotoView', 'newMessageView', -1);
 }
 
 function getPhoto(photoSourceType) {
-    navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
+    navigator.camera.getPicture(onPhotoSuccess, onFail, { quality: 50, 
                                 destinationType: Camera.DestinationType.FILE_URI,
                                 sourceType: photoSourceType 
                                 });
@@ -79,7 +81,7 @@ function prepareNewMessage() {
 }
 
 function addressNotFound() {
-    urboItem.LocationAddress.set('value', 'Adresu se nepodařilo získat! Vyberte ji prosím ručně kliknutím na toto pole nebo obrázek.');
+    urboItem.Location.Address.set('value', 'Adresu se nepodařilo získat! Vyberte ji prosím ručně kliknutím na toto pole nebo obrázek mapy.');
 }
 
 function clearField(id) {
@@ -92,22 +94,22 @@ function onGpsCoordsSuccess(position) {
 }
 
 function refreshLocation(latitude, longitude) {
-    urboItem.LocationLatitude.set('value', latitude);
-    urboItem.LocationLongitude.set('value', longitude);
+    urboItem.Location.Latitude.set('value', latitude);
+    urboItem.Location.Longitude.set('value', longitude);
     
-    console.log("Retrieved GPS coordinates " + urboItem.LocationLatitude + "," + urboItem.LocationLongitude);
+    console.log("Retrieved GPS coordinates " + urboItem.Location.Latitude + "," + urboItem.Location.Longitude);
     
-    retrieveMapForLocation(urboItem.LocationLatitude, urboItem.LocationLongitude);
-    retrieveAddressForLocation(urboItem.LocationLatitude, urboItem.LocationLongitude);
+    retrieveMapForLocation(urboItem.Location.Latitude, urboItem.Location.Longitude);
+    retrieveAddressForLocation(urboItem.Location.Latitude, urboItem.Location.Longitude);
 }
 
 // onError Callback receives a PositionError object
 //
 function onGpsCoordsError(error) {
     // Need to get the GPS coords manually by selecting in a map
-    urboItem.LocationLatitude.set('value', '');
-    urboItem.LocationLongitude.set('value', '');
-    urboItem.LocationAddress.set('value', '');
+    urboItem.Location.Latitude.set('value', '');
+    urboItem.Location.Longitude.set('value', '');
+    urboItem.Location.Address.set('value', '');
     mapDataView.setAttribute('src', '');
     addressNotFound();
 }
@@ -117,10 +119,10 @@ function getGpsCoordinates() {
 }
 
 function adjustLocation() {
-    if(urboItem.LocationLatitude != '') {
-        showMapToAdjust('newMessageView', urboItem.LocationLatitude, urboItem.LocationLongitude);
+    if(urboItem.Location.Latitude != '') {
+        showMapToAdjust('newMessageView', urboItem.Location.Latitude, urboItem.Location.Longitude);
     } else {
-        switchView('newMessageView','provideAddressManuallyView');
+        switchView('newMessageView', 'provideAddressManuallyView', 1);
     }
 }
 
@@ -155,7 +157,7 @@ function createMarker(latlng) {
 }
 
 function showMapToAdjust(viewFrom, lat, long) {
-    switchView(viewFrom,'getLocationManuallyView');
+    switchView(viewFrom,'getLocationManuallyView', 1);
     
     var myOptions = {
     zoom: 15,
@@ -186,12 +188,11 @@ function locationManuallySelected() {
         console.log(marker.position.lng());
         refreshLocation(marker.position.lat(), marker.position.lng());
     }
-    switchView('getLocationManuallyView','newMessageView');
+    switchView('getLocationManuallyView','newMessageView', -1);
 }
 
 function getSomePhoto() {
-    var w = dijit.byId('newMessageView');
-    w.performTransition('#getSomePhotoView',1,"fade",null);                        
+    switchView('newMessageView', 'getSomePhotoView', 1);
 }
 
 function uploadPhoto() {
@@ -222,8 +223,8 @@ function uploadData() {
             "feedback": {
                "title": urboItem.Title.value,
                "description": urboItem.Description.value,
-               "latitude": urboItem.LocationLatitude,
-               "longitude": urboItem.LocationLongitude,                       
+               "latitude": urboItem.Location.Latitude,
+               "longitude": urboItem.Location.Longitude,                       
            }
        }
 
@@ -257,7 +258,91 @@ function guardInfoUploadError(error) {
     alert("An error has occurred: Code = " + error.code);
 }
 
+function setSignature() {
+    if(urboItem.Author.Firstname != '' &&  urboItem.Author.Firstname != '') {
+        document.getElementById('signature').innerHTML = urboItem.Author.Firstname + ' ' + urboItem.Author.Surname;
+    } else {
+        document.getElementById('signature').innerHTML = "Prosím vyplnit.";
+    }
+}
+
+// Profile settings
+
+function setNicknameField() {
+    if(document.getElementById('nicknameCB').checked) {
+        document.getElementById('nicknameField').value = urboItem.Author.Nickname;
+    } else {
+        document.getElementById('nicknameField').value = 'Anonymous';       
+    }
+}
+
+function enterRecapView() {
+
+    if(urboItem.Title == '') {
+        alert('Titulek nové zprávy je povinný.');
+        return false;
+    }
+
+    if(urboItem.Location.Latitude == '') {
+        alert('Prosím vyberte polohu místa výskytu ručně (kliknutím na obrázek mapy).');
+        return false;
+    }
+    console.log("Photo selected : " + urboItem.Photo.Selected);
+    console.log("Photo selected 1 : " + (urboItem.Photo.Selected == 'true'));
+    console.log("Photo selected 2 : " + urboItem.Photo.Selected);
+    console.log("Photo selected 3 : " + (urboItem.Photo.Selected == true));
+    
+    if(urboItem.Photo.Selected == true) {
+        document.getElementById('photoAttachedCB').checked = true;
+    } else {
+        document.getElementById('photoAttachedCB').checked = false;
+    }
+    
+    switchView('newMessageView', 'recapView', 1);
+}
+
+function enterProfileView() {
+
+    document.getElementById('nicknameField').value = urboItem.Author.Nickname; 
+    document.getElementById('firstnameField').value = urboItem.Author.Firstname;
+    document.getElementById('surnameField').value = urboItem.Author.Surname;
+    document.getElementById('emailField').value = urboItem.Author.Email;
+    
+    if(urboItem.Author.Nickname != '') {
+        document.getElementById('nicknameCB').checked = true;
+        document.getElementById('nicknameField').readOnly = false;
+    } else {
+        document.getElementById('nicknameCB').checked = false;
+        document.getElementById('nicknameField').readOnly = true;
+    }
+    setNicknameField();
+    
+    switchView('recapView', 'profileView', 1);
+}
+
 function saveProfileChanges() {
-    console.log(urboItem.Author.Firstname);
-    console.log(urboItem.Author.Surname);    
+    if(document.getElementById('nicknameField').value == '' ||
+       document.getElementById('firstnameField').value == '' ||
+       document.getElementById('surnameField').value == '' ||
+       document.getElementById('emailField').value == '') {
+        alert('Chybějící údaje\n\nProsím vyplňte všechna pole.');
+        return false;
+    }
+    
+    urboItem.Author.Nickname = document.getElementById('nicknameField').value;
+    urboItem.Author.Firstname = document.getElementById('firstnameField').value;
+    urboItem.Author.Surname = document.getElementById('surnameField').value;
+    urboItem.Author.Email = document.getElementById('emailField').value;
+
+    // Persist all profile values to storage
+    var store = new Lawnchair({name:'urboProfile'}, function(store) {
+        store.save({key:'nickname', value: urboItem.Author.Nickname});
+        store.save({key:'firstname', value: urboItem.Author.Firstname});
+        store.save({key:'surname', value: urboItem.Author.Surname});
+        store.save({key:'email', value: urboItem.Author.Email});
+    });
+
+    setSignature();
+                              
+    switchView('profileView', 'recapView', -1);
 }
