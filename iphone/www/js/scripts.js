@@ -278,16 +278,19 @@ function setSignature() {
 
 // Profile settings
 
-function changeAnonSwitch() {
-    if(document.getElementById('anonSwitch').value == "on") {
+function changeAnonSwitch(state) {
+    if(state == "on") {
         document.getElementById('firstnameField').readOnly = true;
         document.getElementById('surnameField').readOnly = true;
         document.getElementById('emailField').readOnly = true;
+        urboItem.Author.Anonymized = true;
     } else {
         document.getElementById('firstnameField').readOnly = false;
         document.getElementById('surnameField').readOnly = false;
         document.getElementById('emailField').readOnly = false;
+        urboItem.Author.Anonymized = false;
     }
+    document.getElementById('anonSwitch').value = state;
 }
 
 function enterRecapView() {
@@ -297,10 +300,10 @@ function enterRecapView() {
         return false;
     }
 
-//    if(urboItem.PhotoSelected == false) {
-//        alert('Prosím přiložte ke zprávě fotografii.');
-//        return false;
-//    }
+    if(urboItem.PhotoSelected == false) {
+        alert('Prosím přiložte ke zprávě fotografii.');
+        return false;
+    }
     
     if(urboItem.Location.Latitude == '') {
         alert('Prosím vyberte polohu místa výskytu ručně (kliknutím na obrázek mapy).');
@@ -332,7 +335,7 @@ function enterProfileView() {
 }
 
 function saveProfileChanges() {
-    if(document.getElementById('anonSwitch').value == "off") {
+    if(document.getElementById('anonSwitch').value == "on") {
         return true;
     }
     if(document.getElementById('emailField').value == '') {
