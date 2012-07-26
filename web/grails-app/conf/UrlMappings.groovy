@@ -14,6 +14,8 @@ class UrlMappings {
             action = [GET: "findAll", POST: "save"]
         }
 
+        "/api/v1/uploadPhoto"(controller: "apiFeedback", action: "uploadPhoto")
+
         //"/api/v1/case/new"(controller: "feedback", action: "save")
 
         "/api/v1/case/$id"(controller: "apiFeedback", action: "findById")

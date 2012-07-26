@@ -43,7 +43,7 @@ class ApiFeedbackController {
         def feedback = new Feedback(
                                 title: feedbackParams.title,
                                 description: feedbackParams.description,
-                                location:  new Location(latitude: feedbackParams.latitude,
+                                location: new Location(latitude: feedbackParams.latitude,
                                                         longitude: feedbackParams.longitude),
                                 author: author)
         if(!feedback.save(failOnError: false, flush: true)) {
@@ -106,22 +106,23 @@ class ApiFeedbackController {
 
         def uploadedFile = request.getFile("file")
         def photo = new Photo()
-        photo.data = uploadedFile
+        photo.data = uploadedFile.getBytes()
 
         photo.save()
 
         // TODO mbernhard : exception reaction
 
-        render(contentType: "application/json") {
+        def jsonBuilder = new JsonBuilder(
+                                status: HttpStatus.SC_OK,
+                                message:
+                                        "File uploaded successfully and saved with id ${photo.id}. " +
+                                        "Use this id when creating new feedback through api as photoId parameter." +
+                                        "PhotoId is easily accessible as photoId parameter of this response object.",
+                                photoId: photo.id)
 
-            status: "200"
-            message:
-                  "File uploaded successfully and saved with id ${photo.id}. " +
-                  "Use this id when creating new feedback through api as photoId parameter." +
-                      "PhotoId is easily accessible as photoId parameter of this response object."
-            photoId: photo.id
+        def jsonResponse = jsonBuilder.toPrettyString()
 
-        }
+        render(status: HttpStatus.SC_OK, contentType: "application/json", text: jsonResponse)
 
     }
 
