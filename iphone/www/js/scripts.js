@@ -127,7 +127,7 @@ function adjustLocation() {
 }
 
 function searchGpsCoordsManually() {
-    var addressField = document.getElementById('placeNameForMap');
+    var addressField = document.getElementById('streetCityField');
     console.log(addressField.value);
     var geocoder = new google.maps.Geocoder();
     geocoder.geocode({'address': addressField.value}, 
@@ -135,11 +135,11 @@ function searchGpsCoordsManually() {
                      if (status == google.maps.GeocoderStatus.OK) { 
                          var loc = results[0].geometry.location;
                          console.log(loc);
-                         document.getElementById('googleMapResult').innerHTML = loc.lat() + "," + loc.lng();
+                         document.getElementById('locationSearchResult').innerHTML = loc.lat() + "," + loc.lng();
                          showMapToAdjust('provideAddressManuallyView', loc.lat(), loc.lng())
                      } 
                      else {
-                        document.getElementById('googleMapResult').innerHTML = 'Not found: ' + status;
+                        document.getElementById('locationSearchResult').innerHTML = 'Not found: ' + status;
                      } 
                      });
 }
@@ -259,38 +259,53 @@ function guardInfoUploadError(error) {
 }
 
 function setSignature() {
-    if(urboItem.Author.Firstname != '' &&  urboItem.Author.Firstname != '') {
-        document.getElementById('signature').innerHTML = urboItem.Author.Firstname + ' ' + urboItem.Author.Surname;
-    } else {
-        document.getElementById('signature').innerHTML = "Prosím vyplnit.";
+    var sign = "";
+    if(urboItem.Author.Anonymized) {
+        sign = "Anonymní zadavatel";
     }
+    else if(urboItem.Author.Firstname != '' || urboItem.Author.Firstname != '') {
+        sign = urboItem.Author.Firstname + ' ' + urboItem.Author.Surname;
+    } 
+    else if(urboItem.Author.Email != '') {
+        sign = urboItem.Author.Email;
+    }
+    else {
+        sign = "Prosím vyplnit.";
+    }
+    document.getElementById('signature').innerHTML = sign;
+    urboItem.Author.Signature = sign;
 }
 
 // Profile settings
 
-function setNicknameField() {
-    if(document.getElementById('nicknameCB').checked) {
-        document.getElementById('nicknameField').value = urboItem.Author.Nickname;
+function changeAnonSwitch() {
+    if(document.getElementById('anonSwitch').value == "on") {
+        document.getElementById('firstnameField').readOnly = true;
+        document.getElementById('surnameField').readOnly = true;
+        document.getElementById('emailField').readOnly = true;
     } else {
-        document.getElementById('nicknameField').value = 'Anonymous';       
+        document.getElementById('firstnameField').readOnly = false;
+        document.getElementById('surnameField').readOnly = false;
+        document.getElementById('emailField').readOnly = false;
     }
 }
 
 function enterRecapView() {
 
     if(urboItem.Title == '') {
-        alert('Titulek nové zprávy je povinný.');
+        alert('Prosím vyplňte titulek Vaší zprávy.');
         return false;
     }
 
+//    if(urboItem.PhotoSelected == false) {
+//        alert('Prosím přiložte ke zprávě fotografii.');
+//        return false;
+//    }
+    
     if(urboItem.Location.Latitude == '') {
         alert('Prosím vyberte polohu místa výskytu ručně (kliknutím na obrázek mapy).');
         return false;
     }
-    console.log("Photo selected : " + urboItem.Photo.Selected);
-    console.log("Photo selected 1 : " + (urboItem.Photo.Selected == 'true'));
-    console.log("Photo selected 2 : " + urboItem.Photo.Selected);
-    console.log("Photo selected 3 : " + (urboItem.Photo.Selected == true));
     
     if(urboItem.Photo.Selected == true) {
         document.getElementById('photoAttachedCB').checked = true;
@@ -298,45 +313,39 @@ function enterRecapView() {
         document.getElementById('photoAttachedCB').checked = false;
     }
     
+    setSignature();
+    
     switchView('newMessageView', 'recapView', 1);
 }
 
 function enterProfileView() {
 
-    document.getElementById('nicknameField').value = urboItem.Author.Nickname; 
     document.getElementById('firstnameField').value = urboItem.Author.Firstname;
     document.getElementById('surnameField').value = urboItem.Author.Surname;
     document.getElementById('emailField').value = urboItem.Author.Email;
     
-    if(urboItem.Author.Nickname != '') {
-        document.getElementById('nicknameCB').checked = true;
-        document.getElementById('nicknameField').readOnly = false;
-    } else {
-        document.getElementById('nicknameCB').checked = false;
-        document.getElementById('nicknameField').readOnly = true;
-    }
-    setNicknameField();
+    document.getElementById('anonSwitch').value = "off";
+    
+    changeAnonSwitch();
     
     switchView('recapView', 'profileView', 1);
 }
 
 function saveProfileChanges() {
-    if(document.getElementById('nicknameField').value == '' ||
-       document.getElementById('firstnameField').value == '' ||
-       document.getElementById('surnameField').value == '' ||
-       document.getElementById('emailField').value == '') {
-        alert('Chybějící údaje\n\nProsím vyplňte všechna pole.');
+    if(document.getElementById('anonSwitch').value == "off") {
+        return true;
+    }
+    if(document.getElementById('emailField').value == '') {
+        alert('Chybějící údaje\n\nProsím vyplňte Váš e-mail.');
         return false;
     }
     
-    urboItem.Author.Nickname = document.getElementById('nicknameField').value;
-    urboItem.Author.Firstname = document.getElementById('firstnameField').value;
-    urboItem.Author.Surname = document.getElementById('surnameField').value;
-    urboItem.Author.Email = document.getElementById('emailField').value;
+    urboItem.Author.Firstname = document.getElementById('firstnameField').value.trim();
+    urboItem.Author.Surname = document.getElementById('surnameField').value.trim();
+    urboItem.Author.Email = document.getElementById('emailField').value.trim();
 
     // Persist all profile values to storage
-    var store = new Lawnchair({name:'urboProfile'}, function(store) {
-        store.save({key:'nickname', value: urboItem.Author.Nickname});
+    var store = new Lawnchair({name:'urboAuthor'}, function(store) {
         store.save({key:'firstname', value: urboItem.Author.Firstname});
         store.save({key:'surname', value: urboItem.Author.Surname});
         store.save({key:'email', value: urboItem.Author.Email});
