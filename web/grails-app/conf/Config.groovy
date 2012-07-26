@@ -111,3 +111,8 @@ grails {
 }
 
 markdown.hardwraps = true
+
+// Added by the Spring Security Core plugin:
+grails.plugins.springsecurity.userLookup.userDomainClassName = 'cz.urbo.user.User'
+grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'cz.urbo.user.UserRole'
+grails.plugins.springsecurity.authority.className = 'cz.urbo.user.Role'
