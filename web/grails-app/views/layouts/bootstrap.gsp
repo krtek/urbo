@@ -39,16 +39,20 @@
 					</a>
 					
 					<a class="brand" href="${createLink(uri: '/')}">Urbo</a>
-                    <!--
-					<div class="nav-collapse">
-						<ul class="nav">							
-							<li<%= request.forwardURI == "${createLink(uri: '/')}" ? ' class="active"' : '' %>><a href="${createLink(uri: '/')}">Home</a></li>
-							<g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
-								<li<%= c.logicalPropertyName == controllerName ? ' class="active"' : '' %>><g:link controller="${c.logicalPropertyName}">${c.naturalName}</g:link></li>
-							</g:each>
-						</ul>
-					</div>
-					-->
+                    <ul class="nav nav-pills">
+                        <li class="dropdown" id="controllers">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#controllers">
+                                Controllers
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
+                                    <li<%= c.logicalPropertyName == controllerName ? ' class="active"' : '' %>><g:link controller="${c.logicalPropertyName}">${c.naturalName}</g:link></li>
+                                </g:each>
+
+                            </ul>
+                        </li>
+                    </ul>
 				</div>
 			</div>
 		</nav>
