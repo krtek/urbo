@@ -38,8 +38,8 @@
 						<span class="icon-bar"></span>
 					</a>
 					
-					<a class="brand" href="${createLink(uri: '/')}">Grails Twitter Bootstrap</a>
-
+					<a class="brand" href="${createLink(uri: '/')}">Urbo</a>
+                    <!--
 					<div class="nav-collapse">
 						<ul class="nav">							
 							<li<%= request.forwardURI == "${createLink(uri: '/')}" ? ' class="active"' : '' %>><a href="${createLink(uri: '/')}">Home</a></li>
@@ -48,6 +48,7 @@
 							</g:each>
 						</ul>
 					</div>
+					-->
 				</div>
 			</div>
 		</nav>
