@@ -6,9 +6,6 @@
         <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no"/>
         
-        <!-- !!!REMOVE THIS WHEN GOING LIVE!!!, prevent cache -->
-        <meta http-equiv="cache-control" content="no-cache" />
-        <meta http-equiv="pragma" content="no-cache" />
         
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <title>Dobrý občan</title>
@@ -57,6 +54,7 @@
 
             }
             
+            // Help function to read stored value
             function readStoredValue(store, key) {
                 var retValue = '';
                 store.exists(key, function(exists) {
@@ -69,7 +67,12 @@
                 return retValue;
             }
             
-            // Load the widget parser and mobile base
+            // String trimmer, removes all left/right white spaces
+            String.prototype.trim = function() {
+                return this.replace(/^\s+|\s+$/g,"");
+            }
+            
+            // Include all required modules of dojo, this list is created manually
             require([
                      "dojox/mobile/parser", // must be as the first required object
                      "dojox/mobile",
@@ -87,37 +90,35 @@
                      "dojox/mvc/Output"
                      ], 
                     function(parser, deviceTheme) {
-                    
-                    urboItem = dojox.mvc.newStatefulModel({ data : {
-                                                            "Title" : "", 
-                                                            "Photo" : {"Selected" : false,
-                                                                       "URI" : ""},
-                                                            "Location" : {"Latitude" : "",
-                                                                          "Longitude" : "",
-                                                                          "Address" : ""},
-                                                            "Description" : "",
-                                                            "Author" : {"Firstname" : "",
-                                                                        "Surname" : "",
-                                                                        "Email" : ""},
-                                                            }});
+                        // This defines the model object, all needed values should be stored here, only several of them can finally
+                        // be send to the server
+                        urboItem = dojox.mvc.newStatefulModel({ data : {
+                                                                "Title" : "", 
+                                                                "Photo" : {"Selected" : false,
+                                                                           "URI" : ""},
+                                                                "Location" : {"Latitude" : "",
+                                                                              "Longitude" : "",
+                                                                              "Address" : ""},
+                                                                "Description" : "",
+                                                                "Author" : {"Anonymized" : false,
+                                                                            "Email" : "",
+                                                                            "Firstname" : "",
+                                                                            "Surname" : "",
+                                                                            "Signature" : "",
+                                                                            },
+                                                                }});
 
-                    // Try to read all stored values
-                    var store = new Lawnchair({name:'urboProfile'}, function(store) {
-                                                urboItem.Author.Firstname = readStoredValue(store, 'firstname');
-                                                urboItem.Author.Surname = readStoredValue(store, 'firstname');
-                                                urboItem.Author.Email = readStoredValue(store, 'firstname');
-                                              });
-                    
-                    // Parse the page for widgets!
-                    parser.parse();
-                    
-//                    dojo.connect(document.getElementById('profileView'), "onBeforeTransitionIn", null,
-//                                 function(moveTo, dir, transition, context, method){
-//                                     console.log('Entering view'); 
-//                                     enteringProfileView();
-//                                 });
+                        // Try to read all stored values (some webkit storage place)
+                        var store = new Lawnchair({name:'urboAuthor'}, function(store) {
+                                                    urboItem.Author.Firstname = readStoredValue(store, 'firstname');
+                                                    urboItem.Author.Surname = readStoredValue(store, 'firstname');
+                                                    urboItem.Author.Email = readStoredValue(store, 'firstname');
+                                                  });
+                        
+                        // Parse the page for widgets, now the dojo will now what is facing with
+                        parser.parse();
                     }
-                    );
+            );
             
             String.prototype.trunc = function(n,useWordBoundary){
                 var toLong = this.length>n,
@@ -125,6 +126,10 @@
                 s_ = useWordBoundary && toLong ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
                 return  toLong ? s_ + '&hellip;' : s_;
             };
+            
+            dojo.connect(dijit.byId("anonSwitch"), "onStateChanged", function(newState){
+              changeAnonSwitch();
+            });
             </script>
     </head>
     <body onload="onBodyLoad()">
@@ -133,7 +138,9 @@
          A view represents one container (typically a page, dialog) in the mobile device.
          The first view will be the selected, or the one with 'selected' attribute set to 'true' 
          -->
-        <div id="menuView" data-dojo-type="dojox.mobile.View" selected="true">
+        
+        <!-- Menu of the application -->
+        <div id="menuView" data-dojo-type="dojox.mobile.View">
             <div data-dojo-type="dojox.mobile.RoundRectList">
                 <li data-dojo-type="dojox.mobile.ListItem">
                     <center>
@@ -141,7 +148,7 @@
                     </center>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" moveTo="newMessageView" transition="slide" onClick="prepareNewMessage();">Nová urbo zpráva</li>
-                <li data-dojo-type="dojox.mobile.ListItem" moveTo="myMessagesView" transtion="slide">Moje urbo zprávy</li>
+                <li data-dojo-type="dojox.mobile.ListItem" moveTo="myMessagesView" transition="slide">Moje urbo zprávy</li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props="variableHeight:true">
                     <center>
                         <img src="imgs/urbo.png" width="180" height="220" />
@@ -151,6 +158,7 @@
             </div>
         </div>
         
+        <!-- Entering new message view -->
         <div id="newMessageView" data-dojo-type="dojox.mobile.View">
             <h1 data-dojo-type="dojox.mobile.Heading" label="Nová zpráva" back="Zpět" moveTo="menuView">
                 <div data-dojo-type="dojox.mobile.ToolBarButton" label="Další" onClick="enterRecapView();" style="float:right;"></div>
@@ -169,7 +177,6 @@
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
                     <span style="display: inline; text-align: center; white-space: nowrap;">
-
                         <img id="mapDataView" src="" style="height: 80px; width: 80px;" onClick="adjustLocation()" />
                         <textarea id="addressDataView" readonly="readonly" data-dojo-type="dojox.mobile.TextArea" cols="25" rows="5"></textarea>
                     </span>
@@ -180,20 +187,21 @@
             </div>
         </div>
         
+        <!-- This view offers two ways to select a photo, from device's camera or from photo gallery -->
         <div id="getSomePhotoView" data-dojo-type="dojox.mobile.View">
             <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="newMessageView" transition="slide">Přidání fotky</h1>
             <ul data-dojo-type="dojox.mobile.RoundRectList">
-                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="getPhoto(Camera.PictureSourceType.CAMERA)" data-dojo-props='variableHeight:true'>Kamera</li>
-                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="getPhoto(Camera.PictureSourceType.PHOTOLIBRARY)">Galerie fotek</li>
+                <li data-dojo-type="dojox.mobile.ListItem" moveTo="#" onClick="getPhoto(Camera.PictureSourceType.CAMERA);">Kamera</li>
+                <li data-dojo-type="dojox.mobile.ListItem" moveTo="#" onClick="getPhoto(Camera.PictureSourceType.PHOTOLIBRARY);">Galerie fotek</li>
             </ul>
         </div>
         
         <div id="provideAddressManuallyView" data-dojo-type="dojox.mobile.View">
             <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="newMessageView">Vyhledání místa</h1>
             <ul data-dojo-type="dojox.mobile.RoundRectList">
-                <li data-dojo-type="dojox.mobile.ListItem" rightIcon="libs/dojo/dojox/mobile/themes/iphone/compat/gray-arrow.png" onClick="searchGpsCoordsManually()">
-                    <input id="placeNameForMap" data-dojo-type="dojox.mobile.TextBox" placeHolder="Ulice, město" data-dojo-props="ref: urboItem.Title" maxlength="40" />
-                    <div id="googleMapResult"></div>
+                <li data-dojo-type="dojox.mobile.ListItem" moveTo="#" onClick="searchGpsCoordsManually()">
+                    <input id="streetCityField" data-dojo-type="dojox.mobile.TextBox" placeHolder="Ulice, město" maxlength="40" />
+                    <div id="locationSearchResult"></div>
                 </li>
             </ul>
         </div>
@@ -206,6 +214,8 @@
                 <div id="mapWindow" style="width: 100%; min-height: 400px; height: 100%;"></div>
             </ul>
         </div>        
+        
+        <!-- Recapitulation of a message, displays all the important information -->
         <div id="recapView" data-dojo-type="dojox.mobile.View">
             <h1 data-dojo-type="dojox.mobile.Heading" back="Zpět" moveTo="newMessageView">Rekapitulace                
                 <div data-dojo-type="dojox.mobile.ToolBarButton" label="Odeslat" class="mblColorBlue" style="width:45px;float:right;" moveTo="#" onClick="uploadPhoto()"></div>
@@ -219,7 +229,7 @@
                     Věc: <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: urboItem.Title">${this.value}</span>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
-                    <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: urboItem.Description">${this.value.trunc(300, true)}</span>
+                    <span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: urboItem.Description">${this.value.trunc(300)}</span>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem" data-dojo-props='variableHeight:true'>
                     Kde: <br/><span data-dojo-type="dojox.mvc.Output" data-dojo-props="ref: urboItem.Location.Address">${this.value.replace(/\\n/g, "<br/>")}</span>
@@ -239,13 +249,13 @@
             </h1>
             <div data-dojo-type="dojox.mobile.RoundRectList">
                 <li data-dojo-type="dojox.mobile.ListItem">
-                    <div style="float:left;">Anonymní odeslání</div><div id="anonSwitch" data-dojo-type="dojox.mobile.Switch" style="float:right;" value="on" leftLabel="Ano" rightLabel="Ne"></div>
+                    Anonymní odeslání<div id="anonSwitch" class="mblItemSwitch" data-dojo-type="dojox.mobile.Switch" value="off" leftLabel="Ano" rightLabel="Ne"></div>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem">
-                    <div style="float:left;">Jméno:</div><div style="float:right;"><input id="firstnameField" style= data-dojo-type="dojox.mobile.TextBox" maxlength="30" /></div>
+                    <div style="float:left;">Jméno:</div><div style="float:right;"><input id="firstnameField" data-dojo-type="dojox.mobile.TextBox" maxlength="30" /></div>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem">
-                    <div style="float:left;">Příjmení:</div> <div style="float:right;"><input id="surnameField" style= data-dojo-type="dojox.mobile.TextBox" maxlength="30" /></div>
+                    <div style="float:left;">Příjmení:</div> <div style="float:right;"><input id="surnameField" data-dojo-type="dojox.mobile.TextBox" maxlength="30" /></div>
                 </li>
                 <li data-dojo-type="dojox.mobile.ListItem">
                     <div style="float:left;">E-mail:</div><div style="float:right;"><input id="emailField" data-dojo-type="dojox.mobile.TextBox" maxlength="30" /></div>
