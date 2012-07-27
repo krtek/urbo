@@ -63,7 +63,7 @@
 			<hr>
 
 			<footer>
-				<p>&copy; Company 2011</p>
+				<p>&copy; Urbo 2012</p>
 			</footer>
 		</div>
 
