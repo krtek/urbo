@@ -63,5 +63,8 @@ grails.project.dependency.resolution = {
         compile ":markdown:1.0.0.RC1"
         compile ":mail:1.0"
         compile ":quartz:1.0-RC2"
+
+        //heroku database
+        runtime "postgresql:postgresql:8.4-702.jdbc3"
     }
 }
