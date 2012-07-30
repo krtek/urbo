@@ -32,7 +32,7 @@
 			<section id="main" class="span9">
 
 				<div class="hero-unit">
-					<h1>Urbo admin konzole</h1>
+					<h1>Urbo admin konzola</h1>
 
 					<p>Ahojda.</p>
                     <p>Urbo Tě vítá.</p>
