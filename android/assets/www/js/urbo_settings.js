@@ -16,7 +16,7 @@ Urbo.Settings.Api.createFullUrlFor = function(relativeApiUrl) {
 };
 
 Urbo.Settings.Api.protocol = "http";
-Urbo.Settings.Api.hostName = "192.168.200.209";
+Urbo.Settings.Api.hostName = "urbo.herokuapp.com";
 Urbo.Settings.Api.hostPort = "80";
 Urbo.Settings.Api.photoUploadRelativeUrl = "/api/v1/uploadPhoto";
 Urbo.Settings.Api.urboItemSaveRelativeUrl = "/api/v1/case"
