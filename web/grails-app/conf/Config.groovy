@@ -116,3 +116,5 @@ markdown.hardwraps = true
 grails.plugins.springsecurity.userLookup.userDomainClassName = 'cz.urbo.user.User'
 grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'cz.urbo.user.UserRole'
 grails.plugins.springsecurity.authority.className = 'cz.urbo.user.Role'
+grails.plugins.springsecurity.dao.reflectionSaltSourceProperty = 'username'
+grails.plugins.springsecurity.password.encodeHashAsBase64 = true
