@@ -1,4 +1,4 @@
-package web
+package cz.urbo.cases
 
 class Author {
 

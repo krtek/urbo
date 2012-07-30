@@ -1,6 +1,7 @@
 package web
 
 import cz.superobcan.web.FeedbackState
+import cz.urbo.cases.Feedback
 
 class MailJob {
     static triggers = {

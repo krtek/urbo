@@ -1,10 +1,10 @@
 import cz.superobcan.web.FeedbackTestUtils
 import grails.util.Environment
-import web.Author
-import web.Feedback
-import web.Email
-import web.Feedback
-import web.Location
+import cz.urbo.cases.Author
+import cz.urbo.cases.Feedback
+import cz.urbo.cases.Email
+import cz.urbo.cases.Feedback
+import cz.urbo.cases.Location
 import cz.urbo.user.UserRole
 import cz.urbo.user.Role
 import cz.urbo.user.User

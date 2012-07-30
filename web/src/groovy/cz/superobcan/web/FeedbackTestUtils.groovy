@@ -1,9 +1,9 @@
 package cz.superobcan.web
 
-import web.Author
-import web.Email
-import web.Feedback
-import web.Location
+import cz.urbo.cases.Author
+import cz.urbo.cases.Email
+import cz.urbo.cases.Feedback
+import cz.urbo.cases.Location
 
 /**
  * Created with IntelliJ IDEA.

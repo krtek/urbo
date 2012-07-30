@@ -1,6 +1,6 @@
 package admin
 
-import web.Email
+import cz.urbo.cases.Email
 
 class EmailController {
     static def scaffold = Email

@@ -3,7 +3,7 @@ package cz.superobcan.web.cz.superobcan
 import org.junit.Before
 import org.junit.Test
 import org.springframework.http.HttpMethod
-import web.Feedback
+import cz.urbo.cases.Feedback
 import api.ApiFeedbackController
 
 

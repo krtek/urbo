@@ -1,4 +1,4 @@
-package web
+package cz.urbo.cases
 
 import cz.superobcan.web.FeedbackState
 import groovy.transform.EqualsAndHashCode

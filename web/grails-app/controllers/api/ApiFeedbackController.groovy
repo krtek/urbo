@@ -2,11 +2,11 @@ package api
 
 import cz.urbo.web.api.utils.org.apache.commons.httpclient.HttpStatus
 import groovy.json.JsonBuilder
-import web.Author
-import web.Email
-import web.Feedback
-import web.Location
-import web.Photo
+import cz.urbo.cases.Author
+import cz.urbo.cases.Email
+import cz.urbo.cases.Feedback
+import cz.urbo.cases.Location
+import cz.urbo.cases.Photo
 
 /**
  * This is WEB API of URBO Application

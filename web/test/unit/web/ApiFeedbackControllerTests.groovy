@@ -5,6 +5,7 @@ import grails.test.MockUtils
 import grails.test.mixin.*
 import org.apache.commons.lang.StringUtils
 import api.ApiFeedbackController
+import cz.urbo.cases.Feedback
 /**
  * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */

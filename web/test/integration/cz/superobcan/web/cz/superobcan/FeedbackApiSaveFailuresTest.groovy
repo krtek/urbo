@@ -3,7 +3,7 @@ package cz.superobcan.web.cz.superobcan
 import org.apache.commons.lang.StringUtils
 import org.junit.Test
 import org.springframework.http.HttpMethod
-import web.Feedback
+import cz.urbo.cases.Feedback
 import api.ApiFeedbackController
 
 class FeedbackApiSaveFailuresTest extends GroovyTestCase {

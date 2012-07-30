@@ -1,6 +1,7 @@
 package web
 
 import groovy.json.JsonBuilder
+import cz.urbo.cases.Feedback
 
 class FeedbackService {
 

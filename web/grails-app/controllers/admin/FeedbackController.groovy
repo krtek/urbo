@@ -1,6 +1,6 @@
 package admin
 
-import web.Feedback
+import cz.urbo.cases.Feedback
 import grails.plugins.springsecurity.Secured
 
 @Secured(['ROLE_ADMIN'])
