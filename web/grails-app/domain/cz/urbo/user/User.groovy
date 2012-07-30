@@ -1,8 +1,5 @@
 package cz.urbo.user
 
-import cz.urbo.user.Role
-import cz.urbo.user.UserRole
-
 class User {
 
 	transient springSecurityService
