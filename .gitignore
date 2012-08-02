@@ -3,14 +3,16 @@
 *Db.script
 .settings
 eclipse
+.idea
 stacktrace.log
 target
 /plugins
 /web-app/plugins
 /web-app/WEB-INF/classes
-
+gen/
+out/
 iphone/.DS_Store
-
+local.properties
 iphone/DobryObcan.xcodeproj/project.xcworkspace/xcuserdata/krtek.xcuserdatad/UserInterfaceState.xcuserstate
 
 iphone/DobryObcan.xcodeproj/xcuserdata/krtek.xcuserdatad/xcschemes/DobryObcan.xcscheme
