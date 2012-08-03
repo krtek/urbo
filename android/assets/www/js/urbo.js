@@ -216,6 +216,7 @@ function googleOAuth() {
     var authorize_url = "https://accounts.google.com/o/oauth2/auth";
     authorize_url +=  "?response_type=code";
     authorize_url += "&scope=https://www.googleapis.com/auth/userinfo.email";
+    //authorize_url += "&scope=https://www.googleapis.com/auth/userinfo.profile"; returns name etc.
     authorize_url += "&client_id=" + my_client_id;
     authorize_url += "&redirect_uri=" + my_redirect_uri;
 
