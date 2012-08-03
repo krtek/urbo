@@ -167,6 +167,74 @@ function uploadData(photoId) {
 }
 
 function sendUrboItemToServer() { /* save the world */
+    if (!$('body').data("user")) {
+        googleOAuth();
+    }
+    console.log("Sending with user: " + $('body').data("user"));
     $.mobile.changePage('#send_dialog','pop',false,true)
     uploadPhoto(photoUploadSuccessHandler, photoUploadErrorHandler) /* inside photoUploadSuccessHandler it calls uploadData */
+}
+
+function googleOAuth() {
+    var my_client_id = "445034773821-iv2qgdkf4a50paekcaq0kkrseolgc00m.apps.googleusercontent.com",
+        my_redirect_uri = "http://localhost/oauth2callback",
+        client_secret = "NMaJccwi-j_kHLFYRDTFiUZv";
+
+    var authorize_url = "https://accounts.google.com/o/oauth2/auth";
+    authorize_url +=  "?response_type=code";
+    authorize_url += "&scope=https://www.googleapis.com/auth/userinfo.email";
+    authorize_url += "&client_id=" + my_client_id;
+    authorize_url += "&redirect_uri=" + my_redirect_uri;
+
+    client_browser = window.plugins.childBrowser;
+    client_browser.install();
+    client_browser.onLocationChange = function(loc){
+
+        //This is called twice (why?). First try is rejected by Google auth servers. Second try works. Honestly I dont know why.
+        if (loc.indexOf("http://localhost/oauth2callback?code=") > -1) {
+            var googleCode = loc.match(/code=(.*)$/)[1]
+            console.log('Google code is: ' + googleCode);
+            client_browser.close();
+            console.log('encoded code: ' + encodeURIComponent(googleCode));
+            console.log('encoded uri: ' + encodeURIComponent(my_redirect_uri));
+            var tokenUrl = "https://accounts.google.com/o/oauth2/token";
+            $.ajax({
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                type: "POST",
+                data: {
+                    code : googleCode,
+                    client_id: my_client_id,
+                    client_secret: client_secret,
+                    redirect_uri: my_redirect_uri,
+                    grant_type: "authorization_code",
+                    scope: ""
+                },
+                url: tokenUrl,
+                context: document.body,
+                dataType: "json"
+            }).done(function(data) {
+                    console.log('Token: ' + data.access_token);
+                    $.ajax({
+                        headers: {"Content-Type": "application/json"},
+                        type: "GET",
+                        url: "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + data.access_token,
+                        context: document.body,
+                        dataType: "json"
+                    }).done(function(data) {
+                            console.log('Obtained profile: ' + JSON.stringify(data));
+                            $('body').data("user", data.email);
+                        }).fail(function (data) {
+                            console.log('Profile request failed: ' + JSON.stringify(data));
+                        });
+
+            }).fail(function (data) {
+                    console.log('Token  failed: ' + JSON.stringify(data));
+            });
+        }
+    };
+
+
+    if (client_browser != null) {
+        window.plugins.childBrowser.showWebPage(authorize_url);
+    }
 }
