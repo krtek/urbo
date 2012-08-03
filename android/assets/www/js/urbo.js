@@ -166,13 +166,46 @@ function uploadData(photoId) {
         });
 }
 
-function sendUrboItemToServer() { /* save the world */
-    if (!$('body').data("user")) {
-        googleOAuth();
+function validateData() {
+    alert ($('body').data("e-mail"))
+    if (!$('body').data("e-mail")) {
+        $('#error_message').text("Prosím, přihlaš se!")
+        $.mobile.changePage('#error_dialog','pop',false,true)
+        return false;
     }
-    console.log("Sending with user: " + $('body').data("user"));
-    $.mobile.changePage('#send_dialog','pop',false,true)
-    uploadPhoto(photoUploadSuccessHandler, photoUploadErrorHandler) /* inside photoUploadSuccessHandler it calls uploadData */
+
+    if (!$("#title").val()) {
+        $('#error_message').text("Prosím, přidej titulek!")
+        $.mobile.changePage('#error_dialog','pop',false,true)
+        return false;
+    }
+
+    if (!$('body').data('latitude')) {
+        $('#error_message').text("Prosím, oprav místo!")
+        $.mobile.changePage('#error_dialog','pop',false,true)
+        return false;
+    }
+
+    if (!$('#photoThumbnail').attr('src')) {
+        $('#error_message').text("Prosím, přidej fotku!")
+        $.mobile.changePage('#error_dialog','pop',false,true)
+        return false;
+    }
+
+    return true;
+
+}
+
+function sendUrboItemToServer() { /* save the world */
+    if (validateData()) {
+        console.log("Sending with user: " + $('body').data("e-mail"));
+        $.mobile.changePage('#send_dialog','pop',false,true)
+        uploadPhoto(photoUploadSuccessHandler, photoUploadErrorHandler) /* inside photoUploadSuccessHandler it calls uploadData */
+    }
+}
+
+function dismissDialog() {
+    $('.ui-dialog').dialog('close');
 }
 
 function googleOAuth() {
@@ -222,7 +255,14 @@ function googleOAuth() {
                         dataType: "json"
                     }).done(function(data) {
                             console.log('Obtained profile: ' + JSON.stringify(data));
-                            $('body').data("user", data.email);
+
+                            console.log('email: ' + data.email);
+                            $('body').data("e-mail", data.email);
+                            //this is not in the response :/
+                            //$('body').data("first_name", data.given_name);
+                            //$('body').data("family_name", data.family_name);
+                            $('#login_button .ui-btn-text').text(data.email)
+
                         }).fail(function (data) {
                             console.log('Profile request failed: ' + JSON.stringify(data));
                         });

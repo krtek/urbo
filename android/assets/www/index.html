@@ -53,6 +53,7 @@
                 <a href="#photo_dialog" data-rel="dialog" data-transition="pop" data-role="button">Přidat...</a>
             </div>
         </div>
+        <a href="#account_dialog" data-rel="dialog" data-transition="pop" data-role="button" id="login_button">Přihlásit</a>
     </div>
 </div>
 
@@ -82,6 +83,28 @@
     </div>
     <div data-role="content">
         <div id="send_message">Odesílám fotku...</div>
+    </div>
+</div>
+
+<div data-role="dialog" id="error_dialog">
+    <div data-role="header">
+        <h1>Chybka!</h1>
+    </div>
+    <div data-role="content">
+        <div id="error_message">Chyba</div>
+        <a href="#create" data-role="button">OK</a>
+    </div>
+</div>
+
+<div data-role="dialog" id="account_dialog">
+    <div data-role="header">
+        <h1>Přihlas se!</h1>
+    </div>
+    <div data-role="content">
+        <a href="#" data-role="button" onclick="dismissDialog();googleOAuth();">Google</a>
+        <a href="#" class="ui-disabled" data-role="button">Facebook</a>
+        <a href="#" class="ui-disabled" data-role="button">Twitter</a>
+        <a href="#" class="ui-disabled" data-role="button">Co já vím</a>
     </div>
 </div>
 
