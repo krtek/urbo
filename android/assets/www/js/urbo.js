@@ -112,6 +112,7 @@ function photoUploadErrorHandler(error) {
 
     console.error("Error occured during photo uploading. Error info: " + errorInfo, error);
     alert("Photo uploading failed. An error has occurred: Error: " + errorInfo);
+    $('.ui-dialog').dialog('close')
 
 }
 
@@ -136,6 +137,7 @@ function uploadPhoto(photoUploadSuccessHandler, photoUploadErrorHandler) {
 }
 
 function uploadData(photoId) {
+    $('#send_message').text("Odesílám data...");
     var jsonObj = {
         "feedback": {
             "title": $("#title").val(),
@@ -154,11 +156,17 @@ function uploadData(photoId) {
         context: document.body
     }).done(function() {
             console.log('Message sent.');
+            $('#send_message').text("Hotovo.");
+            $('.ui-dialog').dialog('close')
+            $.mobile.changePage('#menu','flip',false,true)
+
     }).fail(function () {
             console.log('Message failed.');
+            $('.ui-dialog').dialog('close')
         });
 }
 
 function sendUrboItemToServer() { /* save the world */
+    $.mobile.changePage('#send_dialog','pop',false,true)
     uploadPhoto(photoUploadSuccessHandler, photoUploadErrorHandler) /* inside photoUploadSuccessHandler it calls uploadData */
 }
