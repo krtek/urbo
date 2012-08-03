@@ -54,7 +54,7 @@ public class ChildBrowser extends Plugin {
     private Dialog dialog;
     private WebView webview;
     private EditText edittext;
-    private boolean showLocationBar = true;
+    private boolean showLocationBar = false;
 
     /**
      * Executes the request and returns PluginResult.
