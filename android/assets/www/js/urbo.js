@@ -144,7 +144,10 @@ function uploadData(photoId) {
             "description": $("#description").val(),
             "latitude": $('body').data('latitude'),
             "longitude": $('body').data('longitude'),
-            "photo_id": photoId
+            "photo_id": photoId,
+            "identification": $('body').data('identification'),
+            "provider": $('body').data('provider')
+
         }
     }
     var dataAsString = JSON.stringify(jsonObj);
@@ -167,8 +170,7 @@ function uploadData(photoId) {
 }
 
 function validateData() {
-    alert ($('body').data("e-mail"))
-    if (!$('body').data("e-mail")) {
+    if (!$('body').data("identification")) {
         $('#error_message').text("Prosím, přihlaš se!")
         $.mobile.changePage('#error_dialog','pop',false,true)
         return false;
@@ -258,7 +260,8 @@ function googleOAuth() {
                             console.log('Obtained profile: ' + JSON.stringify(data));
 
                             console.log('email: ' + data.email);
-                            $('body').data("e-mail", data.email);
+                            $('body').data("identification", data.email);
+                            $('body').data("provider", "GOOGLE");
                             //this is not in the response :/
                             //$('body').data("first_name", data.given_name);
                             //$('body').data("family_name", data.family_name);
