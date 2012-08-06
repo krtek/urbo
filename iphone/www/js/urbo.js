@@ -112,6 +112,7 @@ function photoUploadErrorHandler(error) {
 
     console.error("Error occured during photo uploading. Error info: " + errorInfo, error);
     alert("Photo uploading failed. An error has occurred: Error: " + errorInfo);
+    $('.ui-dialog').dialog('close')
 
 }
 
@@ -136,6 +137,7 @@ function uploadPhoto(photoUploadSuccessHandler, photoUploadErrorHandler) {
 }
 
 function uploadData(photoId) {
+    $('#send_message').text("Odesílám data...");
     var jsonObj = {
         "feedback": {
             "title": $("#title").val(),
@@ -154,11 +156,126 @@ function uploadData(photoId) {
         context: document.body
     }).done(function() {
             console.log('Message sent.');
+            $('#send_message').text("Hotovo.");
+            $('.ui-dialog').dialog('close')
+            $.mobile.changePage('#menu','flip',false,true)
+
     }).fail(function () {
             console.log('Message failed.');
+            $('.ui-dialog').dialog('close')
         });
 }
 
+function validateData() {
+    alert ($('body').data("e-mail"))
+    if (!$('body').data("e-mail")) {
+        $('#error_message').text("Prosím, přihlaš se!")
+        $.mobile.changePage('#error_dialog','pop',false,true)
+        return false;
+    }
+
+    if (!$("#title").val()) {
+        $('#error_message').text("Prosím, přidej titulek!")
+        $.mobile.changePage('#error_dialog','pop',false,true)
+        return false;
+    }
+
+    if (!$('body').data('latitude')) {
+        $('#error_message').text("Prosím, oprav místo!")
+        $.mobile.changePage('#error_dialog','pop',false,true)
+        return false;
+    }
+
+    if (!$('#photoThumbnail').attr('src')) {
+        $('#error_message').text("Prosím, přidej fotku!")
+        $.mobile.changePage('#error_dialog','pop',false,true)
+        return false;
+    }
+
+    return true;
+
+}
+
 function sendUrboItemToServer() { /* save the world */
-    uploadPhoto(photoUploadSuccessHandler, photoUploadErrorHandler) /* inside photoUploadSuccessHandler it calls uploadData */
+    if (validateData()) {
+        console.log("Sending with user: " + $('body').data("e-mail"));
+        $.mobile.changePage('#send_dialog','pop',false,true)
+        uploadPhoto(photoUploadSuccessHandler, photoUploadErrorHandler) /* inside photoUploadSuccessHandler it calls uploadData */
+    }
+}
+
+function dismissDialog() {
+    $('.ui-dialog').dialog('close');
+}
+
+function googleOAuth() {
+    var my_client_id = "445034773821-iv2qgdkf4a50paekcaq0kkrseolgc00m.apps.googleusercontent.com",
+        my_redirect_uri = "http://localhost/oauth2callback",
+        client_secret = "NMaJccwi-j_kHLFYRDTFiUZv";
+
+    var authorize_url = "https://accounts.google.com/o/oauth2/auth";
+    authorize_url +=  "?response_type=code";
+    authorize_url += "&scope=https://www.googleapis.com/auth/userinfo.email";
+    //authorize_url += "&scope=https://www.googleapis.com/auth/userinfo.profile"; returns name etc.
+    authorize_url += "&client_id=" + my_client_id;
+    authorize_url += "&redirect_uri=" + my_redirect_uri;
+
+    client_browser = window.plugins.childBrowser;
+    client_browser.install();
+    client_browser.onLocationChange = function(loc){
+
+        //This is called twice (why?). First try is rejected by Google auth servers. Second try works. Honestly I dont know why.
+        if (loc.indexOf("http://localhost/oauth2callback?code=") > -1) {
+            var googleCode = loc.match(/code=(.*)$/)[1]
+            console.log('Google code is: ' + googleCode);
+            client_browser.close();
+            console.log('encoded code: ' + encodeURIComponent(googleCode));
+            console.log('encoded uri: ' + encodeURIComponent(my_redirect_uri));
+            var tokenUrl = "https://accounts.google.com/o/oauth2/token";
+            $.ajax({
+                headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                type: "POST",
+                data: {
+                    code : googleCode,
+                    client_id: my_client_id,
+                    client_secret: client_secret,
+                    redirect_uri: my_redirect_uri,
+                    grant_type: "authorization_code",
+                    scope: ""
+                },
+                url: tokenUrl,
+                context: document.body,
+                dataType: "json"
+            }).done(function(data) {
+                    console.log('Token: ' + data.access_token);
+                    $.ajax({
+                        headers: {"Content-Type": "application/json"},
+                        type: "GET",
+                        url: "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + data.access_token,
+                        context: document.body,
+                        dataType: "json"
+                    }).done(function(data) {
+                            console.log('Obtained profile: ' + JSON.stringify(data));
+
+                            console.log('email: ' + data.email);
+                            $('body').data("e-mail", data.email);
+                            //this is not in the response :/
+                            //$('body').data("first_name", data.given_name);
+                            //$('body').data("family_name", data.family_name);
+                            $('#login_button .ui-btn-text').text(data.email)
+
+                        }).fail(function (data) {
+                            console.log('Profile request failed: ' + JSON.stringify(data));
+                        });
+
+            }).fail(function (data) {
+                    console.log('Token  failed: ' + JSON.stringify(data));
+            });
+        }
+    };
+
+
+    if (client_browser != null) {
+        window.plugins.childBrowser.showWebPage(authorize_url);
+    }
 }
