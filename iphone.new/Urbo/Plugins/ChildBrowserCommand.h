@@ -4,22 +4,11 @@
 // Continued maintainance @RandyMcMillan 2010/2011/2012
 
 #import <Foundation/Foundation.h>
-#ifdef PHONEGAP_FRAMEWORK
-#import <PhoneGap/PGPlugin.h>
-#endif
-//#else
-#ifdef CORDOVA_FRAMEWORK
 #import <CORDOVA/CDVPlugin.h>
-#endif
 #import "ChildBrowserViewController.h"
 
 
-#ifdef PHONEGAP_FRAMEWORK
-    @interface ChildBrowserCommand : PGPlugin <ChildBrowserDelegate>  {
-#endif
-#ifdef CORDOVA_FRAMEWORK
-    @interface ChildBrowserCommand : CDVPlugin <ChildBrowserDelegate>  {
-#endif
+@interface ChildBrowserCommand : CDVPlugin <ChildBrowserDelegate>  {
 	ChildBrowserViewController* childBrowser;
 }
 
