@@ -27,13 +27,13 @@
     <div data-role="content">
         <p><a href="#create" data-icon="plus" data-role="button" data-transition="flip">Nový urbo případ</a></p>
         <p><a href="#" data-icon="home" data-role="button">Moje urbo případy</a></p>
-        <p><a href="#" data-icon="info" data-role="button">O aplikaci</a></p>
+        <p><a href="#about" data-icon="info" data-role="button" data-transition="flip">O aplikaci</a></p>
     </div>
 </div>
 
 <div data-role="page" id="create">
     <div data-role="header">
-        <h1>Urbo</h1>
+        <h1>Nový případ</h1>
         <a href="#menu" data-icon="delete">Zrušit</a>
         <a href="#" data-icon="check" onclick="sendUrboItemToServer();">Odeslat</a>
     </div>
@@ -57,6 +57,21 @@
             </div>
         </div>
         <a href="#account_dialog" data-rel="dialog" data-transition="pop" data-role="button" id="login_button">Přihlásit</a>
+    </div>
+</div>
+
+<div data-role="page" id="about">
+    <div data-role="header">
+        <h1>O aplikaci</h1>
+        <a href="#menu" data-icon="back" data-transition="flip">Zpět</a>
+    </div>
+    <div data-role="content">
+        <h2>Zlepši svět kolem sebe</h2>
+        <p>Nahlášené problémy předáváme na příslušný <strong>obecní úřad</strong> a staráme se o nápravu.</p>
+        <h2>Přidej se k nám</h2>
+        <p>Urbo je 100% <strong>open-source</strong>, každý může <a href="https://github.com/krtek/urbo">přiložit ruku k dílu</a>.</p>
+        <p><h4>&copy; <a href="http://urbo.cz">Urbo</a>, 2012</h4></p>
+        <a href="#menu" data-icon="back" data-role="button" data-transition="flip">Ok</a>
     </div>
 </div>
 
