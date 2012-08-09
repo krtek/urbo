@@ -282,3 +282,13 @@ function googleOAuth() {
         window.plugins.childBrowser.showWebPage(authorize_url);
     }
 }
+
+/**
+ * Allows anonymous case submission.
+ */
+function anonAuth() {
+    $('body').data("identification", "Anonymní zbabělec");
+    $('body').data("provider", "NONE");
+    $('#login_button .ui-btn-text').text($('body').data("identification"));
+    return true;
+}
