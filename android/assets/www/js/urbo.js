@@ -4,12 +4,12 @@ function onFail(message) {
 
 function onPhotoSuccess(photoURI) {
     console.log("Selected photo on uri: " + photoURI);
-    $('.ui-dialog').dialog('close')
     $("#photoThumbnail").attr("src", photoURI)
 
 }
 
 function getPhoto(photoSourceType) {
+    $('.ui-dialog').dialog('close');
     navigator.camera.getPicture(onPhotoSuccess, onFail, { quality: 50,
         destinationType: Camera.DestinationType.FILE_URI,
         sourceType: photoSourceType
@@ -37,7 +37,7 @@ function onGpsCoordsError(error) {
     $("#mapThumbnail").attr("src", "")
 }
 function getGpsCoordinates() {
-    navigator.geolocation.getCurrentPosition(onGpsCoordsSuccess, onGpsCoordsError);
+    navigator.geolocation.getCurrentPosition(onGpsCoordsSuccess, onGpsCoordsError, { enableHighAccuracy: true });
 }
 
 var map, marker;
@@ -291,4 +291,12 @@ function anonAuth() {
     $('body').data("provider", "NONE");
     $('#login_button .ui-btn-text').text($('body').data("identification"));
     return true;
+}
+
+function newCase() {
+    getGpsCoordinates();
+    $("#title").val(null);
+    $("#description").val(null);
+    $('#photoThumbnail').attr('src', null);
+    //$.mobile.changePage('#create','flip',false,true);
 }

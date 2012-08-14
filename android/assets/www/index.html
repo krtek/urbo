@@ -25,8 +25,8 @@
         <h1>Urbo</h1>
     </div>
     <div data-role="content">
-        <p><a href="#create" data-icon="plus" data-role="button" data-transition="flip">Nový urbo případ</a></p>
-        <p><a href="#" data-icon="home" data-role="button">Moje urbo případy</a></p>
+        <p><a href="#create" data-icon="plus" data-role="button" data-transition="flip" onclick="newCase();">Nový urbo případ</a></p>
+        <p><a href="#" data-icon="home" data-role="button" data-transition="flip">Moje urbo případy</a></p>
         <p><a href="#about" data-icon="info" data-role="button" data-transition="flip">O aplikaci</a></p>
     </div>
 </div>
@@ -132,7 +132,7 @@
 
 <script>
     $(document).ready(function() {
-       getGpsCoordinates();
+
     });
 
     $(document).bind('pageshow', function(e, data) {
