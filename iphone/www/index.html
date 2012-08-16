@@ -8,29 +8,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <script type="text/javascript" charset="utf-8" src="cordova-2.0.0.js"></script>
-    <script type="text/javascript" charset="utf-8" src="childbrowser.js"></script>
+    <script type="text/javascript" charset="utf-8" src="ChildBrowser.js"></script>
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.0-alpha.1/jquery.mobile-1.2.0-alpha.1.min.css" />
     <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
     <script src="http://code.jquery.com/mobile/1.2.0-alpha.1/jquery.mobile-1.2.0-alpha.1.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
+    <script src="js/index.js"></script>
     <script src="js/urbo.js"></script>
     <script src="js/urbo_settings.js"></script>
 </head>
 <body>
+
+<!-- Pages -->
+
 <div data-role="page" id="menu">
     <div data-role="header">
         <h1>Urbo</h1>
     </div>
     <div data-role="content">
-        <p><a href="#create" data-icon="plus" data-role="button" data-transition="flip">Nový urbo případ</a></p>
-        <p><a href="#" data-icon="home" data-role="button">Moje urbo případy</a></p>
-        <p><a href="#" data-icon="info" data-role="button">O aplikaci</a></p>
+        <p><a href="#create" data-icon="plus" data-role="button" data-transition="flip" onclick="newCase();">Nový urbo případ</a></p>
+        <p><a href="#" data-icon="home" data-role="button" data-transition="flip">Moje urbo případy</a></p>
+        <p><a href="#about" data-icon="info" data-role="button" data-transition="flip">O aplikaci</a></p>
     </div>
 </div>
 
 <div data-role="page" id="create">
     <div data-role="header">
-        <h1>Urbo</h1>
+        <h1>Nový případ</h1>
         <a href="#menu" data-icon="delete">Zrušit</a>
         <a href="#" data-icon="check" onclick="sendUrboItemToServer();">Odeslat</a>
     </div>
@@ -56,6 +60,23 @@
         <a href="#account_dialog" data-rel="dialog" data-transition="pop" data-role="button" id="login_button">Přihlásit</a>
     </div>
 </div>
+
+<div data-role="page" id="about">
+    <div data-role="header">
+        <h1>O aplikaci</h1>
+        <a href="#menu" data-icon="back" data-transition="flip">Zpět</a>
+    </div>
+    <div data-role="content">
+        <h2>Zlepši svět kolem sebe</h2>
+        <p>Nahlášené problémy předáváme na příslušný <strong>obecní úřad</strong> a staráme se o nápravu.</p>
+        <h2>Přidej se k nám</h2>
+        <p>Urbo je 100% <strong>open-source</strong>, každý může <a href="https://github.com/krtek/urbo">přiložit ruku k dílu</a>.</p>
+        <p><h4>&copy; <a href="http://urbo.cz">Urbo</a>, 2012</h4></p>
+        <a href="#menu" data-icon="back" data-role="button" data-transition="flip">Ok</a>
+    </div>
+</div>
+
+<!-- Dialogs -->
 
 <div data-role="dialog" id="map_dialog">
     <div data-role="header">
@@ -104,14 +125,16 @@
         <a href="#" data-role="button" onclick="dismissDialog();googleOAuth();">Google</a>
         <a href="#" class="ui-disabled" data-role="button">Facebook</a>
         <a href="#" class="ui-disabled" data-role="button">Twitter</a>
-        <a href="#" class="ui-disabled" data-role="button">Co já vím</a>
+        <a href="#" data-role="button" onclick="dismissDialog();anonAuth();">Anonymní zbabělec</a>
     </div>
 </div>
 
+<!-- Page initialization script -->
 
 <script>
     $(document).ready(function() {
-       getGpsCoordinates();
+        console.log("init...");
+        app.initialize();
     });
 
     $(document).bind('pageshow', function(e, data) {

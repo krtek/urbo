@@ -4,12 +4,12 @@ function onFail(message) {
 
 function onPhotoSuccess(photoURI) {
     console.log("Selected photo on uri: " + photoURI);
-    $('.ui-dialog').dialog('close')
     $("#photoThumbnail").attr("src", photoURI)
 
 }
 
 function getPhoto(photoSourceType) {
+    $('.ui-dialog').dialog('close');
     navigator.camera.getPicture(onPhotoSuccess, onFail, { quality: 50,
         destinationType: Camera.DestinationType.FILE_URI,
         sourceType: photoSourceType
@@ -37,7 +37,7 @@ function onGpsCoordsError(error) {
     $("#mapThumbnail").attr("src", "")
 }
 function getGpsCoordinates() {
-    navigator.geolocation.getCurrentPosition(onGpsCoordsSuccess, onGpsCoordsError);
+    navigator.geolocation.getCurrentPosition(onGpsCoordsSuccess, onGpsCoordsError, { enableHighAccuracy: true });
 }
 
 var map, marker;
@@ -85,8 +85,10 @@ function locationManuallySelected() {
 }
 
 function photoUploadSuccessHandler(response) {
-    console.debug("Photo was successfully uploaded" + response);
-    var photoId = JSON.parse(response.response).photoId;
+    console.log("Photo was successfully uploaded" + response);
+    console.log(response.response);
+    var photoId = JSON.parse(unescape(response.response)).photoId;
+    console.log("Photo id: " + photoId);
     uploadData(photoId);
 }
 
@@ -144,7 +146,10 @@ function uploadData(photoId) {
             "description": $("#description").val(),
             "latitude": $('body').data('latitude'),
             "longitude": $('body').data('longitude'),
-            "photo_id": photoId
+            "photo_id": photoId,
+            "identification": $('body').data('identification'),
+            "provider": $('body').data('provider')
+
         }
     }
     var dataAsString = JSON.stringify(jsonObj);
@@ -167,8 +172,7 @@ function uploadData(photoId) {
 }
 
 function validateData() {
-    alert ($('body').data("e-mail"))
-    if (!$('body').data("e-mail")) {
+    if (!$('body').data("identification")) {
         $('#error_message').text("Prosím, přihlaš se!")
         $.mobile.changePage('#error_dialog','pop',false,true)
         return false;
@@ -191,9 +195,7 @@ function validateData() {
         $.mobile.changePage('#error_dialog','pop',false,true)
         return false;
     }
-
     return true;
-
 }
 
 function sendUrboItemToServer() { /* save the world */
@@ -209,9 +211,9 @@ function dismissDialog() {
 }
 
 function googleOAuth() {
-    var my_client_id = "445034773821-iv2qgdkf4a50paekcaq0kkrseolgc00m.apps.googleusercontent.com",
-        my_redirect_uri = "http://localhost/oauth2callback",
-        client_secret = "NMaJccwi-j_kHLFYRDTFiUZv";
+    var my_client_id = "513662719783.apps.googleusercontent.com",
+        my_redirect_uri = "http://urbo.herokuapp.com/oauth2callback",
+        client_secret = "JyTdA2pXzMzGYEt04rxN2-6b";
 
     var authorize_url = "https://accounts.google.com/o/oauth2/auth";
     authorize_url +=  "?response_type=code";
@@ -220,15 +222,16 @@ function googleOAuth() {
     authorize_url += "&client_id=" + my_client_id;
     authorize_url += "&redirect_uri=" + my_redirect_uri;
 
-    var childbrowser = ChildBrowser.install();
-//    client_browser.install();
-    childbrowser.onLocationChange = function(loc){
-
+    client_browser = window.plugins.childBrowser;
+    
+    console.log('Openning web page');
+    client_browser.onLocationChange = function(loc){
+        console.log('Google code is: ' + googleCode);
         //This is called twice (why?). First try is rejected by Google auth servers. Second try works. Honestly I dont know why.
-        if (loc.indexOf("http://localhost/oauth2callback?code=") > -1) {
+        if (loc.indexOf("http://urbo.herokuapp.com/oauth2callback?code=") > -1) {
             var googleCode = loc.match(/code=(.*)$/)[1]
             console.log('Google code is: ' + googleCode);
-            childbrowser.close();
+            client_browser.close();
             console.log('encoded code: ' + encodeURIComponent(googleCode));
             console.log('encoded uri: ' + encodeURIComponent(my_redirect_uri));
             var tokenUrl = "https://accounts.google.com/o/oauth2/token";
@@ -258,7 +261,8 @@ function googleOAuth() {
                             console.log('Obtained profile: ' + JSON.stringify(data));
 
                             console.log('email: ' + data.email);
-                            $('body').data("e-mail", data.email);
+                            $('body').data("identification", data.email);
+                            $('body').data("provider", "GOOGLE");
                             //this is not in the response :/
                             //$('body').data("first_name", data.given_name);
                             //$('body').data("family_name", data.family_name);
@@ -274,8 +278,25 @@ function googleOAuth() {
         }
     };
 
-
-    if (childbrowser != null) {
-        childbrowser.showWebPage(authorize_url);
+    if (client_browser != null) {
+        client_browser.showWebPage(authorize_url);
     }
+}
+
+/**
+ * Allows anonymous case submission.
+ */
+function anonAuth() {
+    $('body').data("identification", "Anonymní zbabělec");
+    $('body').data("provider", "NONE");
+    $('#login_button .ui-btn-text').text($('body').data("identification"));
+    return true;
+}
+
+function newCase() {
+    getGpsCoordinates();
+    $("#title").val(null);
+    $("#description").val(null);
+    $('#photoThumbnail').attr('src', null);
+    //$.mobile.changePage('#create','flip',false,true);
 }

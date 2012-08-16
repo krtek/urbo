@@ -3,6 +3,7 @@ var app = {
         this.bind();
     },
     bind: function() {
+        console.log("bind on deviceready");
         document.addEventListener('deviceready', this.deviceready, false);
     },
     deviceready: function() {
