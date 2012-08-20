@@ -117,13 +117,15 @@
     </div>
 </div>
 
+
 <div data-role="dialog" id="account_dialog">
+
     <div data-role="header">
         <h1>Přihlas se!</h1>
     </div>
     <div data-role="content">
         <a href="#" data-role="button" onclick="dismissDialog();googleOAuth();">Google</a>
-        <a href="#" class="ui-disabled" data-role="button">Facebook</a>
+        <a href="#" data-role="button" onclick="dismissDialog();facebookOAuth();">Facebook</a>
         <a href="#" class="ui-disabled" data-role="button">Twitter</a>
         <a href="#" data-role="button" onclick="dismissDialog();anonAuth();">Anonymní zbabělec</a>
     </div>

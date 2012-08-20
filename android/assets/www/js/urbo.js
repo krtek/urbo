@@ -216,65 +216,43 @@ function googleOAuth() {
         client_secret =  Urbo.Settings.Oauth.Google.ClientSecret;
 
     var authorize_url = "https://accounts.google.com/o/oauth2/auth";
-    authorize_url +=  "?response_type=code";
+    authorize_url +=  "?response_type=token";
     authorize_url += "&scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile";
-    //authorize_url += "&scope=https://www.googleapis.com/auth/userinfo.profile"; returns name etc.
     authorize_url += "&client_id=" + my_client_id;
     authorize_url += "&redirect_uri=" + my_redirect_uri;
 
     client_browser = window.plugins.childBrowser;
 
-    console.log('Openning web page');
+    console.log('Opening authorize URL: ' + authorize_url);
     client_browser.onLocationChange = function(loc){
-        console.log('Google code is: ' + googleCode);
-        //This is called twice (why?). First try is rejected by Google auth servers. Second try works. Honestly I dont know why.
         if (loc.indexOf(Urbo.Settings.Oauth.Google.CallbackURL) > -1) {
-            var googleCode = loc.match(/code=(.*)$/)[1]
-            console.log('Google code is: ' + googleCode);
+            var access_token = loc.match(/access_token=(.*)$/)[1]
+            console.log('Access token is: ' + access_token);
             client_browser.close();
-            console.log('encoded code: ' + encodeURIComponent(googleCode));
+            console.log('encoded token: ' + encodeURIComponent(access_token));
             console.log('encoded uri: ' + encodeURIComponent(my_redirect_uri));
-            var tokenUrl = "https://accounts.google.com/o/oauth2/token";
+
             $.ajax({
-                headers: {"Content-Type": "application/x-www-form-urlencoded"},
-                type: "POST",
-                data: {
-                    code : googleCode,
-                    client_id: my_client_id,
-                    client_secret: client_secret,
-                    redirect_uri: my_redirect_uri,
-                    grant_type: "authorization_code",
-                    scope: ""
-                },
-                url: tokenUrl,
+                headers: {"Content-Type": "application/json"},
+                type: "GET",
+                url: "https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + access_token,
                 context: document.body,
                 dataType: "json"
             }).done(function(data) {
-                    console.log('Token: ' + data.access_token);
-                    $.ajax({
-                        headers: {"Content-Type": "application/json"},
-                        type: "GET",
-                        url: "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + data.access_token,
-                        context: document.body,
-                        dataType: "json"
-                    }).done(function(data) {
-                            console.log('Obtained profile: ' + JSON.stringify(data));
+                    console.log('Obtained profile: ' + JSON.stringify(data));
 
-                            console.log('email: ' + data.email);
-                            $('body').data("identification", data.email);
-                            $('body').data("provider", "GOOGLE");
-                            //this is not in the response :/
-                            //$('body').data("first_name", data.given_name);
-                            //$('body').data("family_name", data.family_name);
-                            $('#login_button .ui-btn-text').text(data.email)
+                    console.log('email: ' + data.email);
+                    $('body').data("identification", data.email);
+                    $('body').data("provider", "GOOGLE");
+                    //this is not in the response :/
+                    //$('body').data("first_name", data.given_name);
+                    //$('body').data("family_name", data.family_name);
+                    $('#login_button .ui-btn-text').text(data.email)
 
-                        }).fail(function (data) {
-                            console.log('Profile request failed: ' + JSON.stringify(data));
-                        });
-
-            }).fail(function (data) {
-                    console.log('Token  failed: ' + JSON.stringify(data));
-            });
+                }).fail(function (data) {
+                    console.log('Profile request failed: ' + JSON.stringify(data));
+                }
+            );
         }
     };
 
@@ -282,6 +260,61 @@ function googleOAuth() {
         client_browser.showWebPage(authorize_url);
     }
 }
+
+function facebookOAuth() {
+    var my_client_id = Urbo.Settings.Oauth.Facebook.ClientId,
+        my_redirect_uri = Urbo.Settings.Oauth.Facebook.CallbackURL,
+        client_secret =  Urbo.Settings.Oauth.Facebook.ClientSecret;
+
+    var authorize_url = "https://m.facebook.com/dialog/oauth";
+    authorize_url +=  "?response_type=token";
+    authorize_url += "&scope=user_about_me+email";
+    //authorize_url += "&scope=https://www.googleapis.com/auth/userinfo.profile"; returns name etc.
+    authorize_url += "&client_id=" + my_client_id;
+    authorize_url += "&redirect_uri=" + my_redirect_uri;
+
+    client_browser = window.plugins.childBrowser;
+
+    console.log('Opening authorize URL: ' + authorize_url);
+    client_browser.onLocationChange = function(loc){
+        if (loc.indexOf(Urbo.Settings.Oauth.Facebook.CallbackURL) > -1) {
+            var access_token = loc.match(/access_token=(.*)$/)[1]
+            console.log('Access token is: ' + access_token);
+            client_browser.close();
+            console.log('encoded token: ' + encodeURIComponent(access_token));
+            console.log('encoded uri: ' + encodeURIComponent(my_redirect_uri));
+
+            $.ajax({
+                headers: {"Content-Type": "application/json"},
+                type: "GET",
+                url: "https://graph.facebook.com/me?access_token=" + access_token,
+                context: document.body,
+                dataType: "json"
+            }).done(function(data) {
+                    console.log('Obtained profile: ' + JSON.stringify(data));
+
+                    console.log('email: ' + data.email);
+                    $('body').data("identification", data.email);
+                    $('body').data("provider", "FACEBOOK");
+                    //this is not in the response :/
+                    //$('body').data("first_name", data.given_name);
+                    //$('body').data("family_name", data.family_name);
+                    $('#login_button .ui-btn-text').text(data.email)
+
+                }).fail(function (data) {
+                    console.log('Profile request failed: ' + JSON.stringify(data));
+                }
+            );
+        }
+    };
+
+
+    if (client_browser != null) {
+        client_browser.showWebPage(authorize_url);
+    }
+}
+
+
 
 /**
  * Allows anonymous case submission.

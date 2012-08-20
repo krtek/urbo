@@ -3,6 +3,7 @@ Urbo.Settings = Urbo.Settings || {};
 Urbo.Settings.Api = Urbo.Settings.Api || {};
 Urbo.Settings.Oauth = Urbo.Settings.Oauth || {};
 Urbo.Settings.Oauth.Google = Urbo.Settings.Oauth.Google || {};
+Urbo.Settings.Oauth.Facebook = Urbo.Settings.Oauth.Facebook || {};
 
 
 /* 
@@ -26,6 +27,10 @@ Urbo.Settings.Api.urboItemSaveRelativeUrl = "/api/v1/case";
 Urbo.Settings.Oauth.Google.CallbackURL = "http://urbo.herokuapp.com/oauth2callback";
 Urbo.Settings.Oauth.Google.ClientSecret = "NMaJccwi-j_kHLFYRDTFiUZv";
 Urbo.Settings.Oauth.Google.ClientId = "445034773821-iv2qgdkf4a50paekcaq0kkrseolgc00m.apps.googleusercontent.com";
+
+Urbo.Settings.Oauth.Facebook.ClientSecret = "658ce4d04f10ee67aff932f131f1e99f";
+Urbo.Settings.Oauth.Facebook.ClientId = "277531465694194";
+Urbo.Settings.Oauth.Facebook.CallbackURL = "http://urbo.herokuapp.com/oauth2callback";
 
 
 Urbo.Settings.Api.getPhotoUploadUrl = function() {
