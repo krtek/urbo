@@ -1,6 +1,6 @@
 [submodule "iphone/www/urbo-mobile"]
 	path = iphone/www/urbo-mobile
-	url = git@github.com:saalistaja/urbo-mobile
+	url = git@github.com:saalistaja/urbo-mobile.git
 [submodule "android/assets/www/urbo-mobile"]
 	path = android/assets/www/urbo-mobile
-	url = git@github.com:saalistaja/urbo-mobile
+	url = git@github.com:saalistaja/urbo-mobile.git
