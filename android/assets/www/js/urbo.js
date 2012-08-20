@@ -85,8 +85,10 @@ function locationManuallySelected() {
 }
 
 function photoUploadSuccessHandler(response) {
-    console.debug("Photo was successfully uploaded" + response);
-    var photoId = JSON.parse(response.response).photoId;
+    console.log("Photo was successfully uploaded" + response);
+    console.log(response.response);
+    var photoId = JSON.parse(unescape(response.response)).photoId;
+    console.log("Photo id: " + photoId);
     uploadData(photoId);
 }
 
@@ -193,9 +195,7 @@ function validateData() {
         $.mobile.changePage('#error_dialog','pop',false,true)
         return false;
     }
-
     return true;
-
 }
 
 function sendUrboItemToServer() { /* save the world */
@@ -223,9 +223,10 @@ function googleOAuth() {
     authorize_url += "&redirect_uri=" + my_redirect_uri;
 
     client_browser = window.plugins.childBrowser;
-    client_browser.install();
-    client_browser.onLocationChange = function(loc){
 
+    console.log('Openning web page');
+    client_browser.onLocationChange = function(loc){
+        console.log('Google code is: ' + googleCode);
         //This is called twice (why?). First try is rejected by Google auth servers. Second try works. Honestly I dont know why.
         if (loc.indexOf("http://localhost/oauth2callback?code=") > -1) {
             var googleCode = loc.match(/code=(.*)$/)[1]
@@ -277,9 +278,8 @@ function googleOAuth() {
         }
     };
 
-
     if (client_browser != null) {
-        window.plugins.childBrowser.showWebPage(authorize_url);
+        client_browser.showWebPage(authorize_url);
     }
 }
 
