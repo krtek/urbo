@@ -9,5 +9,6 @@ To clone repository:
 
 To update repository (with submodules):
 
-	git pull --recurse-submodules 
+	git pull
+	git submodule foreach "(git checkout master; git pull)" 
 
