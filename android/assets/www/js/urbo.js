@@ -211,13 +211,13 @@ function dismissDialog() {
 }
 
 function googleOAuth() {
-    var my_client_id = "445034773821-iv2qgdkf4a50paekcaq0kkrseolgc00m.apps.googleusercontent.com",
-        my_redirect_uri = "http://localhost/oauth2callback",
-        client_secret = "NMaJccwi-j_kHLFYRDTFiUZv";
+    var my_client_id = Urbo.Settings.Oauth.Google.ClientId,
+        my_redirect_uri = Urbo.Settings.Oauth.Google.CallbackURL,
+        client_secret =  Urbo.Settings.Oauth.Google.ClientSecret;
 
     var authorize_url = "https://accounts.google.com/o/oauth2/auth";
     authorize_url +=  "?response_type=code";
-    authorize_url += "&scope=https://www.googleapis.com/auth/userinfo.email";
+    authorize_url += "&scope=https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile";
     //authorize_url += "&scope=https://www.googleapis.com/auth/userinfo.profile"; returns name etc.
     authorize_url += "&client_id=" + my_client_id;
     authorize_url += "&redirect_uri=" + my_redirect_uri;
@@ -228,7 +228,7 @@ function googleOAuth() {
     client_browser.onLocationChange = function(loc){
         console.log('Google code is: ' + googleCode);
         //This is called twice (why?). First try is rejected by Google auth servers. Second try works. Honestly I dont know why.
-        if (loc.indexOf("http://localhost/oauth2callback?code=") > -1) {
+        if (loc.indexOf(Urbo.Settings.Oauth.Google.CallbackURL) > -1) {
             var googleCode = loc.match(/code=(.*)$/)[1]
             console.log('Google code is: ' + googleCode);
             client_browser.close();
